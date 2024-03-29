@@ -10,11 +10,11 @@ namespace NotionTestWork.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ApplicationController : ControllerBase
+    public class ApplicationsController : ControllerBase
     {
         private readonly APIResponse _response;
         private readonly IApplication _appRepo;
-        public ApplicationController(IApplication repo)
+        public ApplicationsController(IApplication repo)
         {
             _appRepo = repo;
             this._response = new();
@@ -59,6 +59,17 @@ namespace NotionTestWork.Controllers
 
             var update = await _appRepo.UpdateApplicationAsync(newApplication, applicationId);
             return Ok(update);
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteById(Guid id)
+        {
+            var application = await _appRepo.GetApplicationById(id);
+            if (string.IsNullOrEmpty(application.Name))
+                return NotFound();
+
+            await _appRepo.DeleteApplicationById(id);
+            return Ok();
         }
 
         //[HttpGet/*(Name = "GetWeatherForecast")*/]

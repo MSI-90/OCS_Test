@@ -54,10 +54,6 @@ namespace NotionTestWork.Repositories
 
         public async Task<ApplicationResponse> GetApplicationById(Guid id)
         {
-            //Guid.TryParse(id, out Guid guid);
-            //if (guid == default)
-            //    throw new Exception("Нет заявки с указаным идентификатором.");
-
             var application = await _context.applications.Include(a => a.Author).SingleOrDefaultAsync(a => a.Id == id);
             if (application != null && !string.IsNullOrEmpty(application.Name))
             {
@@ -77,10 +73,6 @@ namespace NotionTestWork.Repositories
 
         public async Task<ApplicationResponse> UpdateApplicationAsync(DataFroUpdateApplication newData, Guid id)
         {
-            //Guid.TryParse(id, out Guid guidFrom);
-            //if (guidFrom == default)
-            //    throw new Exception("неверный параметр в качестве идентификатора");
-
             var applicationFrorUpdate = await _context.applications.Include(a => a.Author).SingleOrDefaultAsync(a => a.Id == id);
             if (applicationFrorUpdate != null)
             {
@@ -104,6 +96,16 @@ namespace NotionTestWork.Repositories
             }
 
             return new ApplicationResponse();
+        }
+
+        public async Task DeleteApplicationById(Guid id)
+        {
+            var application = await _context.applications.SingleOrDefaultAsync(a => a.Id == id);
+            if (application is not null)
+            {
+                _context.applications.Remove(application);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

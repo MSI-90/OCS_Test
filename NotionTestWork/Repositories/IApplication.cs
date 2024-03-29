@@ -8,5 +8,6 @@ namespace NotionTestWork.Repositories
         Task<ApplicationResponse> CreateApplicationAsync(ApplicationRequest app);
         Task<ApplicationResponse> GetApplicationById(Guid id);
         Task<ApplicationResponse> UpdateApplicationAsync(DataFroUpdateApplication newData, Guid id);
+        Task DeleteApplicationById(Guid id);
     }
 }
