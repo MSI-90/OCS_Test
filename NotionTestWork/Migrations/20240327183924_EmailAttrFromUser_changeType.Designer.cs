@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TestWorkForNotion.EfCode;
@@ -11,9 +12,11 @@ using TestWorkForNotion.EfCode;
 namespace NotionTestWork.Migrations
 {
     [DbContext(typeof(NutchellContext))]
-    partial class NutchellContextModelSnapshot : ModelSnapshot
+    [Migration("20240327183924_EmailAttrFromUser_changeType")]
+    partial class EmailAttrFromUser_changeType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,20 +81,6 @@ namespace NotionTestWork.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("b50ac3d1-bce6-4b77-8221-886fa7ae8566"),
-                            Email = "prof@gmail.com",
-                            UserName = "Professor"
-                        },
-                        new
-                        {
-                            Id = new Guid("289236d5-fad6-43ba-a65f-6155d2c09f8f"),
-                            Email = "student@gmail.com",
-                            UserName = "Student"
-                        });
                 });
 
             modelBuilder.Entity("NotionTestWork.Models.EfClasses.Application", b =>
