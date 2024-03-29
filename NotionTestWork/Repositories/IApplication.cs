@@ -10,5 +10,6 @@ namespace NotionTestWork.Repositories
         Task<ApplicationResponse> UpdateApplicationAsync(DataFroUpdateApplication newData, Guid id);
         Task DeleteApplicationById(Guid id);
         Task SendApplicationAsync(Guid id);
+        Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date);
     }
 }

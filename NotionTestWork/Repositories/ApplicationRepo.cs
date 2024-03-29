@@ -119,5 +119,23 @@ namespace NotionTestWork.Repositories
             application.IsSubmitted = true;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date)
+        {
+            var dateTime = date.ToUniversalTime();
+            var application = await _context.applications.Include(a => a.Author).Where(a => a.CreatedAt > dateTime && a.IsSubmitted).ToListAsync();
+
+            var aapplicationResponses = application.Select(a => new ApplicationResponse
+            {
+                Id = a.Id,
+                Author = a.Author.Id,
+                Activity = a.Activity,
+                Name = a.Name,
+                Description = a.Description,
+                Outline = a.Outline
+            });
+
+            return aapplicationResponses;
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace NotionTestWork.Controllers
         }
 
         [HttpPut("{applicationId:guid}")]
-        public async Task<IActionResult> UpdateApplication([FromForm] DataFroUpdateApplication newApplication, Guid applicationId)
+        public async Task<IActionResult> UpdateApplication([FromBody] DataFroUpdateApplication newApplication, Guid applicationId)
         {
             var getApplication = await _appRepo.GetApplicationById(applicationId);
             if (string.IsNullOrEmpty(getApplication.Name))
@@ -81,6 +81,13 @@ namespace NotionTestWork.Controllers
 
             await _appRepo.SendApplicationAsync(applicationId);
             return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSubmittedApplications([FromQuery] DateTime submittedAfter)
+        {
+            var result = await _appRepo.GetApplicationIfSubmittedAsync(submittedAfter);
+            return Ok(result);
         }
 
         //[HttpGet/*(Name = "GetWeatherForecast")*/]
