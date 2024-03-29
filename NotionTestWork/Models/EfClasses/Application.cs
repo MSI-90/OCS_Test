@@ -19,5 +19,6 @@ namespace NotionTestWork.Models.EfClasses
 
         [MaxLength(1000)]
         public string Outline { get; set; }
+        public bool IsSubmitted { get; set; } = false;
     }
 }

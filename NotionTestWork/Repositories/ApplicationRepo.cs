@@ -25,6 +25,10 @@ namespace NotionTestWork.Repositories
             if (appTitle != null)
                 throw new Exception($"Уже имеется заявка, именуемая, как {app.Name}");
 
+            var IsDraftApplication = await _context.applications.FirstOrDefaultAsync(a => a.IsSubmitted == false);
+            if (IsDraftApplication != null)
+                throw new Exception($"У Вас уже имеется заявка в статусе - не отправлена, идентификатор заявки - {IsDraftApplication.Id}");
+
             var newApplicationResponse = new ApplicationResponse
             {
                 Id = Guid.NewGuid(),
@@ -106,6 +110,14 @@ namespace NotionTestWork.Repositories
                 _context.applications.Remove(application);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        //send application to comitet of programming
+        public async Task SendApplicationAsync(Guid id)
+        {
+            var application = await _context.applications.SingleOrDefaultAsync(application => application.Id == id);
+            application.IsSubmitted = true;
+            await _context.SaveChangesAsync();
         }
     }
 }

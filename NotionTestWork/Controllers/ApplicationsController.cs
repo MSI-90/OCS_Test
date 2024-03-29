@@ -61,14 +61,25 @@ namespace NotionTestWork.Controllers
             return Ok(update);
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteById(Guid id)
+        [HttpDelete("{applicationId:guid}")]
+        public async Task<IActionResult> DeleteById(Guid applicationId)
         {
-            var application = await _appRepo.GetApplicationById(id);
+            var application = await _appRepo.GetApplicationById(applicationId);
             if (string.IsNullOrEmpty(application.Name))
                 return NotFound();
 
-            await _appRepo.DeleteApplicationById(id);
+            await _appRepo.DeleteApplicationById(applicationId);
+            return Ok();
+        }
+
+        [HttpPost("{applicationId:guid}/submit")]
+        public async Task<IActionResult> Submit(Guid applicationId)
+        {
+            var application = await _appRepo.GetApplicationById(applicationId);
+            if (string.IsNullOrEmpty(application.Name))
+                return NotFound();
+
+            await _appRepo.SendApplicationAsync(applicationId);
             return Ok();
         }
 
