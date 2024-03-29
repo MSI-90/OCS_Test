@@ -6,6 +6,7 @@ namespace NotionTestWork.Repositories
     public interface IApplication
     {
         Task<ApplicationResponse> CreateApplicationAsync(ApplicationRequest app);
-        Task<ApplicationResponse> UpdateApplicationAsync(DataFroUpdateApplication newData, string id);
+        Task<ApplicationResponse> GetApplicationById(Guid id);
+        Task<ApplicationResponse> UpdateApplicationAsync(DataFroUpdateApplication newData, Guid id);
     }
 }

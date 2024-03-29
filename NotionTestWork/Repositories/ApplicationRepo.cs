@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NotionTestWork.Models.DTO_models;
 using NotionTestWork.Models.DTO_models.Update;
 using NotionTestWork.Models.EfClasses;
@@ -10,6 +11,7 @@ namespace NotionTestWork.Repositories
     {
         private readonly NutchellContext _context;
         public ApplicationRepo(NutchellContext context) => _context = context;
+
         public async Task<ApplicationResponse> CreateApplicationAsync(ApplicationRequest app)
         {
             var user = await _context.users.SingleOrDefaultAsync(u => u.Id == app.Author);
@@ -50,13 +52,36 @@ namespace NotionTestWork.Repositories
             return newApplicationResponse;
         }
 
-        public async Task<ApplicationResponse> UpdateApplicationAsync(DataFroUpdateApplication newData, string id)
+        public async Task<ApplicationResponse> GetApplicationById(Guid id)
         {
-            Guid.TryParse(id, out Guid guidFrom);
-            if (guidFrom == default)
-                throw new Exception("неверный параметр в качестве идентификатора");
+            //Guid.TryParse(id, out Guid guid);
+            //if (guid == default)
+            //    throw new Exception("Нет заявки с указаным идентификатором.");
 
-            var applicationFrorUpdate = await _context.applications.Include(a => a.Author).SingleOrDefaultAsync(a => a.Id == guidFrom);
+            var application = await _context.applications.Include(a => a.Author).SingleOrDefaultAsync(a => a.Id == id);
+            if (application != null && !string.IsNullOrEmpty(application.Name))
+            {
+                return new ApplicationResponse
+                {
+                    Id = application.Id,
+                    Author = application.Author.Id,
+                    Activity = application.Activity,
+                    Name = application.Name,
+                    Description = application.Description,
+                    Outline = application.Outline
+                };
+            }
+
+            return new ApplicationResponse();
+        }
+
+        public async Task<ApplicationResponse> UpdateApplicationAsync(DataFroUpdateApplication newData, Guid id)
+        {
+            //Guid.TryParse(id, out Guid guidFrom);
+            //if (guidFrom == default)
+            //    throw new Exception("неверный параметр в качестве идентификатора");
+
+            var applicationFrorUpdate = await _context.applications.Include(a => a.Author).SingleOrDefaultAsync(a => a.Id == id);
             if (applicationFrorUpdate != null)
             {
                 applicationFrorUpdate.Activity = newData.Activity;
