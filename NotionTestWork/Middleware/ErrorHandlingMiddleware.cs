@@ -1,4 +1,5 @@
 ﻿using MyTaskManager.Models;
+using NotionTestWork.Models;
 using System.Net;
 using System.Text.Json;
 
@@ -24,10 +25,8 @@ namespace MyTaskManager.Middleware
         }
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            var response = new APIResponse();
-            response.StatusCode = HttpStatusCode.InternalServerError;
-            response.IsSuccess = false;
-            response.ErrorMessages.Add(exception.Message);
+            var response = new ExceptionRequest();
+            response.ErrorMessage.Add(exception.Message);
             context.Response.ContentType = "application/json";
             return context.Response.WriteAsync(JsonSerializer.Serialize(response));
         }

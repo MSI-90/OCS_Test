@@ -12,6 +12,7 @@ namespace NotionTestWork.Repositories
         private readonly NutchellContext _context;
         public ApplicationRepo(NutchellContext context) => _context = context;
 
+        //Добавить новую заявку
         public async Task<ApplicationResponse> CreateApplicationAsync(ApplicationRequest app)
         {
             var user = await _context.users.SingleOrDefaultAsync(u => u.Id == app.Author);
@@ -25,7 +26,7 @@ namespace NotionTestWork.Repositories
             if (appTitle != null)
                 throw new Exception($"Уже имеется заявка, именуемая, как {app.Name}");
 
-            var IsDraftApplication = await _context.applications.FirstOrDefaultAsync(a => a.IsSubmitted == false);
+            var IsDraftApplication = await _context.applications.Include(a => a.Author).FirstOrDefaultAsync(a => a.IsSubmitted == false && a.Author.Id == user.Id);
             if (IsDraftApplication != null)
                 throw new Exception($"У Вас уже имеется заявка в статусе - не отправлена, идентификатор заявки - {IsDraftApplication.Id}");
 
@@ -47,7 +48,8 @@ namespace NotionTestWork.Repositories
                 CreatedAt = DateTime.UtcNow,
                 Name = app.Name,
                 Description = app.Description,
-                Outline = app.Outline
+                Outline = app.Outline,
+                IsSubmitted = false
             };
 
             await _context.applications.AddAsync(newApplicationToDb);
@@ -56,6 +58,7 @@ namespace NotionTestWork.Repositories
             return newApplicationResponse;
         }
 
+        //Получить заявку по Id
         public async Task<ApplicationResponse> GetApplicationById(Guid id)
         {
             var application = await _context.applications.Include(a => a.Author).SingleOrDefaultAsync(a => a.Id == id);
@@ -75,6 +78,7 @@ namespace NotionTestWork.Repositories
             return new ApplicationResponse();
         }
 
+        //отредактировать заявку
         public async Task<ApplicationResponse> UpdateApplicationAsync(DataFroUpdateApplication newData, Guid id)
         {
             var applicationFrorUpdate = await _context.applications.Include(a => a.Author).SingleOrDefaultAsync(a => a.Id == id);
@@ -102,6 +106,7 @@ namespace NotionTestWork.Repositories
             return new ApplicationResponse();
         }
 
+        //удалить заявку по Id
         public async Task DeleteApplicationById(Guid id)
         {
             var application = await _context.applications.SingleOrDefaultAsync(a => a.Id == id);
@@ -112,7 +117,7 @@ namespace NotionTestWork.Repositories
             }
         }
 
-        //send application to comitet of programming
+        //отправить щаявку на проверку программным комитетом
         public async Task SendApplicationAsync(Guid id)
         {
             var application = await _context.applications.SingleOrDefaultAsync(application => application.Id == id);
@@ -120,6 +125,7 @@ namespace NotionTestWork.Repositories
             await _context.SaveChangesAsync();
         }
 
+        //получаем отправленные заявки поданые после указаной даты
         public async Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date)
         {
             var dateTime = date.ToUniversalTime();
@@ -137,5 +143,7 @@ namespace NotionTestWork.Repositories
 
             return aapplicationResponses;
         }
+
+
     }
 }
