@@ -12,5 +12,6 @@ namespace NotionTestWork.Repositories
         Task SendApplicationAsync(Guid id);
         Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date);
         Task<IEnumerable<ApplicationResponse>> GetUnsobmitedApplicationAsync(DateTime date);
+        Task<ApplicationResponse> GetCurrentApplication(Guid id);
     }
 }

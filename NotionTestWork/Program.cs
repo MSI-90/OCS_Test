@@ -1,6 +1,7 @@
 
 using MyTaskManager.Middleware;
 using NotionTestWork.Repositories;
+using NotionTestWork.Services;
 using TestWorkForNotion.EfCode;
 
 namespace NotionTestWork
@@ -22,7 +23,7 @@ namespace NotionTestWork
 
             //my_services
             builder.Services.AddScoped<IApplication, ApplicationRepo>();
-
+            builder.Services.AddSingleton<MyService>();
 
             var app = builder.Build();
 

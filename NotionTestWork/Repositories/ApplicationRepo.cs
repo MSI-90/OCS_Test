@@ -162,5 +162,26 @@ namespace NotionTestWork.Repositories
 
             return aapplicationResponses;
         }
+
+        public async Task<ApplicationResponse> GetCurrentApplication(Guid id)
+        {
+            var user = await _context.users.FindAsync(id);
+            if (user is null)
+                throw new Exception($"Пользователь с данным идентификатором {id} не найден");
+
+            var application = await _context.applications.Include(a => a.Author).FirstOrDefaultAsync(a => a.Author.Id == user.Id && a.IsSubmitted == false);
+            if (application is null)
+                throw new Exception($"Заявок не существует");
+
+            return new ApplicationResponse
+            {
+                Id = application.Id,
+                Author = application.Author.Id,
+                Activity = application.Activity,
+                Name = application.Name,
+                Description = application.Description,
+                Outline = application.Outline
+            };
+        }
     }
 }

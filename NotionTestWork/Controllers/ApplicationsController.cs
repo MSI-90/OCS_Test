@@ -7,6 +7,8 @@ using System.Net;
 using System;
 using NotionTestWork.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
+using NotionTestWork.Models.EfClasses;
+using NotionTestWork.Services;
 
 namespace NotionTestWork.Controllers
 {
@@ -15,10 +17,12 @@ namespace NotionTestWork.Controllers
     public class ApplicationsController : ControllerBase
     {
         private readonly APIResponse _response;
+        private readonly MyService _service;
         private readonly IApplication _appRepo;
-        public ApplicationsController(IApplication repo)
+        public ApplicationsController(IApplication repo, MyService service)
         {
             _appRepo = repo;
+            _service = service;
             this._response = new();
         }
 
@@ -107,8 +111,19 @@ namespace NotionTestWork.Controllers
                 return BadRequest();
         }
 
+        [HttpGet("/users/{userId:guid}/currentapplication")]
+        public async Task<IActionResult> GetCurrentApplication(Guid userId)
+        {
+            var result = await _appRepo.GetCurrentApplication(userId);
+            return Ok(result);
+        }
 
-        //[HttpGet/*(Name = "GetWeatherForecast")*/]
+        [HttpGet("/activities")]
+        public IActionResult GetActivities()
+        {
+            var result = _service.GetActivities();
+            return Ok(result);
+        }
 
     }
 }
