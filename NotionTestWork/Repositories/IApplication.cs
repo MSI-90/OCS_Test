@@ -11,5 +11,6 @@ namespace NotionTestWork.Repositories
         Task DeleteApplicationById(Guid id);
         Task SendApplicationAsync(Guid id);
         Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date);
+        Task<IEnumerable<ApplicationResponse>> GetUnsobmitedApplicationAsync(DateTime date);
     }
 }

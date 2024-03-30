@@ -5,6 +5,8 @@ using NotionTestWork.Repositories;
 using NotionTestWork.Models.DTO_models.Update;
 using System.Net;
 using System;
+using NotionTestWork.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace NotionTestWork.Controllers
 {
@@ -84,12 +86,26 @@ namespace NotionTestWork.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSubmittedApplications([FromQuery] DateTime submittedAfter)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Getpplications([FromQuery] DateTime? submittedAfter, DateTime? unsubmittedOlder)
         {
-            var result = await _appRepo.GetApplicationIfSubmittedAsync(submittedAfter);
-            return Ok(result);
-        }
+            if (submittedAfter.HasValue && unsubmittedOlder.HasValue)
+                return BadRequest();
 
+            if (submittedAfter.HasValue)
+            {
+                var result = await _appRepo.GetApplicationIfSubmittedAsync(submittedAfter.Value);
+                return Ok(result);
+            }
+            else if (unsubmittedOlder.HasValue)
+            {
+                var result = await _appRepo.GetUnsobmitedApplicationAsync(unsubmittedOlder.Value);
+                return Ok(result);
+            }
+            else
+                return BadRequest();
+        }
 
 
         //[HttpGet/*(Name = "GetWeatherForecast")*/]
