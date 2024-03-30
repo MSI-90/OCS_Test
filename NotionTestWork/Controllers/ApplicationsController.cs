@@ -47,6 +47,13 @@ namespace NotionTestWork.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> CreatApp([FromBody] ApplicationRequest newApp)
         {
+            if (string.IsNullOrEmpty(newApp.Author.ToString()))
+            {
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.ErrorMessages.Add("Необходимо указать пользователя");
+                return BadRequest(_response);
+            }
+
             var responseFromBody = await _appRepo.CreateApplicationAsync(newApp);
             if (string.IsNullOrEmpty(responseFromBody.Name))
             {
