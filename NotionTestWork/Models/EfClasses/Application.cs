@@ -7,9 +7,9 @@ namespace NotionTestWork.Models.EfClasses
     {
         public Guid Id { get; set; }
         public User Author { get; set; }
-        public ActivityEnum activity { get; set; }
+        public ActivityEnum Activity { get; set; }
         public DateTime CreatedAt { get; set; }
-        public bool Unsubmitted { get; set; }
+        //public bool Unsubmitted { get; set; }
 
         [MaxLength(100)]
         public string Name { get; set; }
@@ -19,5 +19,6 @@ namespace NotionTestWork.Models.EfClasses
 
         [MaxLength(1000)]
         public string Outline { get; set; }
+        public bool IsSubmitted { get; set; } = false;
     }
 }

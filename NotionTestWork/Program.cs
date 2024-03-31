@@ -1,4 +1,8 @@
 
+using Microsoft.EntityFrameworkCore;
+using MyTaskManager.Middleware;
+using NotionTestWork.Repositories;
+using NotionTestWork.Services;
 using TestWorkForNotion.EfCode;
 
 namespace NotionTestWork
@@ -12,12 +16,23 @@ namespace NotionTestWork
             // Add services to the container.
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddSwaggerGen();
+
+            //EF_Core service
             builder.Services.AddDbContext<NutchellContext>();
 
+            //my_services
+            builder.Services.AddScoped<IApplication, ApplicationRepo>();
+            builder.Services.AddSingleton<MyService>();
+
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var applicationDbContext = scope.ServiceProvider.GetRequiredService<NutchellContext>();
+                applicationDbContext.Database.Migrate();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -26,9 +41,10 @@ namespace NotionTestWork
                 app.UseSwaggerUI();
             }
 
-
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseHttpsRedirection();
+            app.UseRouting();
 
             app.UseAuthorization();
 
