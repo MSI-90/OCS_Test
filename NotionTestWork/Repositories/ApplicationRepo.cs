@@ -31,21 +31,11 @@ namespace NotionTestWork.Repositories
             if (IsDraftApplication != null)
                 throw new Exception($"У Вас уже имеется заявка в статусе - не отправлена, идентификатор заявки - {IsDraftApplication.Id}");
 
-            var newApplicationResponse = new ApplicationResponse
-            {
-                Id = Guid.NewGuid(),
-                Author = app.Author,
-                Activity = app.Activity,
-                Name = app.Name,
-                Description = app.Description,
-                Outline = app.Outline
-            };
-
             var newApplicationToDb = new Application
             {
-                Id = newApplicationResponse.Id,
+                Id = Guid.NewGuid(),
                 Author = user,
-                Activity = newApplicationResponse.Activity,
+                Activity = app.Activity,
                 CreatedAt = DateTime.UtcNow,
                 Name = app.Name,
                 Description = app.Description,
@@ -55,6 +45,16 @@ namespace NotionTestWork.Repositories
 
             await _context.applications.AddAsync(newApplicationToDb);
             await _context.SaveChangesAsync();
+
+            var newApplicationResponse = new ApplicationResponse
+            {
+                Id = newApplicationToDb.Id,
+                Author = user.Id,
+                Activity = newApplicationToDb.Activity,
+                Name = newApplicationToDb.Name,
+                Description = newApplicationToDb.Description,
+                Outline = newApplicationToDb.Outline
+            };
 
             return newApplicationResponse;
         }
