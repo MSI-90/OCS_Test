@@ -7,6 +7,7 @@
     Клонируйте данный репозиторий.
     Установите Docker Desktop (версия 4.28.0 подойдёт) и Docker Compose, если они еще не установлены.
 Использование:
+
 Для запуска сервиса и базы данных, перейдите в каталог проекта и выполните:
 
 make run или docker-compose up --build -d
@@ -23,4 +24,5 @@ make run или docker-compose up --build -d
     Gолучение списка возможных типов активности: GET /activities
 
 HOST http://localhost:8080 
+
 SWAGGER документация http://localhost:8080/swagger/index.html
