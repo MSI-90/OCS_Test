@@ -4,10 +4,6 @@ using NotionTestWork.Models.DTO_models;
 using NotionTestWork.Repositories;
 using NotionTestWork.Models.DTO_models.Update;
 using System.Net;
-using System;
-using NotionTestWork.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using NotionTestWork.Models.EfClasses;
 using NotionTestWork.Services;
 
 namespace NotionTestWork.Controllers
@@ -99,7 +95,7 @@ namespace NotionTestWork.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Getpplications([FromQuery] DateTime? submittedAfter, DateTime? unsubmittedOlder)
+        public async Task<IActionResult> Getpplications([FromQuery] DateTime? submittedAfter, [FromQuery] DateTime? unsubmittedOlder)
         {
             if (submittedAfter.HasValue && unsubmittedOlder.HasValue)
                 return BadRequest();

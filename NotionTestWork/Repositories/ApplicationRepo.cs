@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NotionTestWork.Models.DTO_models;
 using NotionTestWork.Models.DTO_models.Update;
 using NotionTestWork.Models.EfClasses;
+using System.Reflection;
 using TestWorkForNotion.EfCode;
 
 namespace NotionTestWork.Repositories
@@ -82,6 +83,9 @@ namespace NotionTestWork.Repositories
         public async Task<ApplicationResponse> UpdateApplicationAsync(DataFroUpdateApplication newData, Guid id)
         {
             var applicationFrorUpdate = await _context.applications.Include(a => a.Author).SingleOrDefaultAsync(a => a.Id == id);
+            if (applicationFrorUpdate.IsSubmitted == true)
+                throw new Exception("Данная заявка не может быть отредактирована, потому, что она была уже отправлена на проверку");
+
             if (applicationFrorUpdate != null)
             {
                 applicationFrorUpdate.Activity = newData.Activity;
@@ -117,10 +121,26 @@ namespace NotionTestWork.Repositories
             }
         }
 
-        //отправить щаявку на проверку программным комитетом
+        //отправить заявку на проверку программным комитетом
         public async Task SendApplicationAsync(Guid id)
         {
             var application = await _context.applications.SingleOrDefaultAsync(application => application.Id == id);
+
+            Type propertyAsList = application.GetType();
+            PropertyInfo[] properties = propertyAsList.GetProperties();
+            var values = new List<string>();
+
+            foreach (var item in properties)
+                values.Add(item.GetValue(application)?.ToString() ?? string.Empty);
+
+            foreach (var item in values)
+            {
+                if (string.IsNullOrEmpty(item) || item.Equals("string"))
+                {
+                    throw new Exception("Приведите заявку в корректный вид, и после этого можете поаторить отправку");
+                }
+            }
+
             application.IsSubmitted = true;
             await _context.SaveChangesAsync();
         }
