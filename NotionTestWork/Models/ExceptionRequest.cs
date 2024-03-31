@@ -1,4 +1,6 @@
-﻿namespace NotionTestWork.Models
+﻿using System.Net;
+
+namespace NotionTestWork.Models
 {
     public class ExceptionRequest
     {

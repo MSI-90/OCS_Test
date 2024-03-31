@@ -114,10 +114,14 @@ namespace NotionTestWork.Repositories
         public async Task DeleteApplicationById(Guid id)
         {
             var application = await _context.applications.SingleOrDefaultAsync(a => a.Id == id);
-            if (application is not null)
+            if (application is not null && application.IsSubmitted == false)
             {
                 _context.applications.Remove(application);
                 await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Заявка была отправлена на проверку и не может быть удалена");
             }
         }
 
@@ -125,6 +129,9 @@ namespace NotionTestWork.Repositories
         public async Task SendApplicationAsync(Guid id)
         {
             var application = await _context.applications.SingleOrDefaultAsync(application => application.Id == id);
+
+            if (application.IsSubmitted == true)
+                throw new Exception("Данная заявка уже была отправлена на проверку ранее");
 
             Type propertyAsList = application.GetType();
             PropertyInfo[] properties = propertyAsList.GetProperties();
@@ -137,7 +144,7 @@ namespace NotionTestWork.Repositories
             {
                 if (string.IsNullOrEmpty(item) || item.Equals("string"))
                 {
-                    throw new Exception("Приведите заявку в корректный вид, и после этого можете поаторить отправку");
+                    throw new Exception("Приведите заявку в корректный вид (не заполнены или некорректно заполнены поля), и после этого можете поаторить отправку");
                 }
             }
 
@@ -191,7 +198,7 @@ namespace NotionTestWork.Repositories
 
             var application = await _context.applications.Include(a => a.Author).FirstOrDefaultAsync(a => a.Author.Id == user.Id && a.IsSubmitted == false);
             if (application is null)
-                throw new Exception($"Заявок не существует");
+                throw new Exception($"Нет неотправленной заявки");
 
             return new ApplicationResponse
             {

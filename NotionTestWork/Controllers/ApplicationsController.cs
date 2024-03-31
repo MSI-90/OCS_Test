@@ -38,7 +38,6 @@ namespace NotionTestWork.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> CreatApp([FromBody] ApplicationRequest newApp)
@@ -60,6 +59,8 @@ namespace NotionTestWork.Controllers
         }
 
         [HttpPut("{applicationId:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateApplication([FromBody] DataFroUpdateApplication newApplication, Guid applicationId)
         {
             var getApplication = await _appRepo.GetApplicationById(applicationId);
@@ -71,6 +72,8 @@ namespace NotionTestWork.Controllers
         }
 
         [HttpDelete("{applicationId:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteById(Guid applicationId)
         {
             var application = await _appRepo.GetApplicationById(applicationId);
@@ -82,6 +85,8 @@ namespace NotionTestWork.Controllers
         }
 
         [HttpPost("{applicationId:guid}/submit")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Submit(Guid applicationId)
         {
             var application = await _appRepo.GetApplicationById(applicationId);
@@ -114,7 +119,9 @@ namespace NotionTestWork.Controllers
                 return BadRequest();
         }
 
+
         [HttpGet("/users/{userId:guid}/currentapplication")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCurrentApplication(Guid userId)
         {
             var result = await _appRepo.GetCurrentApplication(userId);
