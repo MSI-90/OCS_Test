@@ -26,3 +26,5 @@ make run или docker-compose up --build -d
 HOST http://localhost:8080 
 
 SWAGGER документация http://localhost:8080/swagger/index.html
+
+В браузере Mozilla Firefox может наблюдаться сбой при поптыке обращения к документации Swagger.  
