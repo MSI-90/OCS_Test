@@ -31,11 +31,9 @@
         <li>
             <i>HOST http://localhost:8080 </i> 
         </li>
-        </ul>
         <li>
             <i> SWAGGER документация http://localhost:8080/swagger/index.html </i>
         </li>
-        </ul>
         <li>
            <u> В браузере Mozilla Firefox может наблюдаться сбой при поптыке обращения к документации Swagger.  </u>
         </li>
