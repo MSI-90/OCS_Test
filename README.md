@@ -26,13 +26,17 @@
     <li> Gолучение списка возможных типов активности: GET /activities </li>
 </ul>
 <p>
-    <span>
-        <i>HOST http://localhost:8080 </i>
-    </span>
-    <span>
-        <i> SWAGGER документация http://localhost:8080/swagger/index.html </i>
-    </span>
-    <span>
-        <u>В браузере Mozilla Firefox может наблюдаться сбой при поптыке обращения к документации Swagger.  </u>
-    </span>
+    <ul>
+        <li> <i>HOST http://localhost:8080 </i> </li>
+    <//ul>
+    <sul>
+        <li>
+            <i> SWAGGER документация http://localhost:8080/swagger/index.html </i>
+        </li>
+    </ul>
+    <ul>
+        <li>
+            <u>В браузере Mozilla Firefox может наблюдаться сбой при поптыке обращения к документации Swagger.  </u>
+        </li>
+    </ul>
 </p>
