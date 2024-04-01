@@ -25,9 +25,14 @@
     <li> Получение заявки по идентификатору: GET /applications/{applicationId} </li>
     <li> Gолучение списка возможных типов активности: GET /activities </li>
 </ul>
-
-HOST http://localhost:8080 
-
-SWAGGER документация http://localhost:8080/swagger/index.html
-
-В браузере Mozilla Firefox может наблюдаться сбой при поптыке обращения к документации Swagger.  
+<p>
+    <span>
+        <i>HOST http://localhost:8080 </i>
+    </span>
+    <span>
+        <i> SWAGGER документация http://localhost:8080/swagger/index.html </i>
+    </span>
+    <span>
+        <u>В браузере Mozilla Firefox может наблюдаться сбой при поптыке обращения к документации Swagger.  </u>
+    </span>
+</p>
