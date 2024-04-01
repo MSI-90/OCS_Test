@@ -34,7 +34,7 @@
         <li>
             <i> SWAGGER документация </i> http://localhost:8080/swagger/index.html
         </li>
-        <li style = "text-decoration:underline;">
+        <li>
            В браузере Mozilla Firefox может наблюдаться сбой при поптыке обращения к документации Swagger.
         </li>
     </ul>    
