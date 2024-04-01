@@ -9,7 +9,7 @@
 </ul>
 <dl> Использование: </dl>
 <dt> Для запуска сервиса и базы данных, перейдите в каталог проекта и выполните: </dt>
-<dd make run или docker-compose up --build -d </dd>
+<dd> make run или docker-compose up --build -d </dd>
 Точки доступа API
 
     Создание заявки: POST /applications
