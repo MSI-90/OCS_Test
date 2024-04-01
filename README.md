@@ -29,10 +29,10 @@
 <span>
     <ul>
         <li>
-            <i>HOST http://localhost:8080 </i> 
+            <i>HOST</i> http://localhost:8080 
         </li>
         <li>
-            <i> SWAGGER документация http://localhost:8080/swagger/index.html </i>
+            <i> SWAGGER документация </i> http://localhost:8080/swagger/index.html
         </li>
         <li>
            <u> В браузере Mozilla Firefox может наблюдаться сбой при поптыке обращения к документации Swagger.  </u>
