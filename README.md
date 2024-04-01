@@ -10,17 +10,21 @@
 <dl> Использование: </dl>
 <dt> Для запуска сервиса и базы данных, перейдите в каталог проекта и выполните: </dt>
 <dd> make run или docker-compose up --build -d </dd>
-Точки доступа API
-
-    Создание заявки: POST /applications
-    Редактирование заявки: PUT /applications/{applicationId}
-    Удаление заявки: DELETE /applications/{applicationId}
-    Отправка заявки на рассмотрение: POST /applications/{applicationId}/submit
-    Получение заявок поданных после указанной даты: GET /applications&submittedAfter="дата и время"
-    Получение заявок не поданных и старше определенной даты: GET /applications&unsubmittedOlder="дата и время"
-    Получение текущей не поданной заявки для указанного пользователя: GET /users/{userId}/currentapplication
-    Получение заявки по идентификатору: GET /applications/{applicationId}
-    Gолучение списка возможных типов активности: GET /activities
+<hr />
+<p>
+    <h4>Точки доступа API</h4>
+</p>
+<ul>
+    <li> Создание заявки: POST /applications </li>
+    <li> Редактирование заявки: PUT /applications/{applicationId} </li>
+    <li> Удаление заявки: DELETE /applications/{applicationId} </li>
+    <li> Отправка заявки на рассмотрение: POST /applications/{applicationId}/submit </li>
+    <li> Получение заявок поданных после указанной даты: GET /applications&submittedAfter="дата и время" </li>
+    <li> Получение заявок не поданных и старше определенной даты: GET /applications&unsubmittedOlder="дата и время" </li>
+    <li> Получение текущей не поданной заявки для указанного пользователя: GET /users/{userId}/currentapplication </li>
+    <li> Получение заявки по идентификатору: GET /applications/{applicationId} </li>
+    <li> Gолучение списка возможных типов активности: GET /activities </li>
+</ul>
 
 HOST http://localhost:8080 
 
