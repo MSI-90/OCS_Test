@@ -15,10 +15,9 @@ public class ApplicationsController : ControllerBase
 {
     private readonly APIResponse _response;
     private readonly IActivities _activities;
-    private readonly IApplicationRepository _appRepo;
+    private readonly IApplicationService _service;
     public ApplicationsController(IApplicationRepository repo, IActivities activities)
     {
-        _appRepo = repo;
         _activities = activities;
         this._response = new();
     }
@@ -29,12 +28,13 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(Guid applicationId)
     {
-        var result = await _appRepo.GetApplicationById(applicationId);
-        if (string.IsNullOrEmpty(result.Name))
-        {
-            return BadRequest();
-        }
-        return Ok(result);
+        //var result = await _appRepo.GetApplicationById(applicationId);
+        //if (string.IsNullOrEmpty(result.Name))
+        //{
+        //    return BadRequest();
+        //}
+        //return Ok(result);
+        return Ok();
     }
 
     [HttpPost]
@@ -50,7 +50,7 @@ public class ApplicationsController : ControllerBase
             return BadRequest(_response);
         }
 
-        var responseFromBody = await _appRepo.CreateApplicationAsync(newApp);
+        var responseFromBody = await _service.CreateApplicationAsync(newApp);
         if (string.IsNullOrEmpty(responseFromBody.Name))
         {
             return NotFound();
@@ -64,12 +64,13 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateApplication([FromBody] UpdateApplicationRequest newApplication, Guid applicationId)
     {
-        var getApplication = await _appRepo.GetApplicationById(applicationId);
-        if (string.IsNullOrEmpty(getApplication.Name))
-            return NotFound();
+        //var getApplication = await _appRepo.GetApplicationById(applicationId);
+        //if (string.IsNullOrEmpty(getApplication.Name))
+        //    return NotFound();
 
-        var update = await _appRepo.UpdateApplicationAsync(newApplication, applicationId);
-        return Ok(update);
+        //var update = await _appRepo.UpdateApplicationAsync(newApplication, applicationId);
+        //return Ok(update);
+        return Ok();
     }
 
     [HttpDelete("{applicationId:guid}")]
@@ -77,11 +78,12 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteApplicationById(Guid applicationId)
     {
-        var application = await _appRepo.GetApplicationById(applicationId);
-        if (string.IsNullOrEmpty(application.Name))
-            return NotFound();
+        //var application = await _appRepo.GetApplicationById(applicationId);
+        //if (string.IsNullOrEmpty(application.Name))
+        //    return NotFound();
 
-        await _appRepo.DeleteApplicationById(applicationId);
+        //await _appRepo.DeleteApplicationById(applicationId);
+        //return Ok();
         return Ok();
     }
 
@@ -90,11 +92,12 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SubmitApplication(Guid applicationId)
     {
-        var application = await _appRepo.GetApplicationById(applicationId);
-        if (string.IsNullOrEmpty(application.Name))
-            return NotFound();
+        //var application = await _appRepo.GetApplicationById(applicationId);
+        //if (string.IsNullOrEmpty(application.Name))
+        //    return NotFound();
 
-        await _appRepo.SendApplicationAsync(applicationId);
+        //await _appRepo.SendApplicationAsync(applicationId);
+        //return Ok();
         return Ok();
     }
 
@@ -103,21 +106,22 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetApplications([FromQuery] DateTime? submittedAfter, [FromQuery] DateTime? unsubmittedOlder)
     {
-        if (submittedAfter.HasValue && unsubmittedOlder.HasValue)
-            return BadRequest();
+        //if (submittedAfter.HasValue && unsubmittedOlder.HasValue)
+        //    return BadRequest();
 
-        if (submittedAfter.HasValue)
-        {
-            var result = await _appRepo.GetApplicationIfSubmittedAsync(submittedAfter.Value);
-            return Ok(result);
-        }
-        else if (unsubmittedOlder.HasValue)
-        {
-            var result = await _appRepo.GetUnsobmitedApplicationAsync(unsubmittedOlder.Value);
-            return Ok(result);
-        }
-        else
-            return BadRequest();
+        //if (submittedAfter.HasValue)
+        //{
+        //    var result = await _appRepo.GetApplicationIfSubmittedAsync(submittedAfter.Value);
+        //    return Ok(result);
+        //}
+        //else if (unsubmittedOlder.HasValue)
+        //{
+        //    var result = await _appRepo.GetUnsobmitedApplicationAsync(unsubmittedOlder.Value);
+        //    return Ok(result);
+        //}
+        //else
+        //    return BadRequest();
+        return Ok();
     }
 
 
@@ -125,8 +129,9 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCurrentApplication(Guid userId)
     {
-        var result = await _appRepo.GetCurrentApplication(userId);
-        return Ok(result);
+        //var result = await _appRepo.GetCurrentApplication(userId);
+        //return Ok(result);
+        return Ok();
     }
 
     [HttpGet("/activities")]

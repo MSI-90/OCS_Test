@@ -1,4 +1,4 @@
-﻿using NotionTestWork.Application;
+﻿using NotionTestWork.Domain;
 
 namespace Application.Dto.Applications;
 

@@ -12,6 +12,12 @@ public class ApplicationContext : DbContext, IApplicationDbContext
     public ApplicationContext(DbContextOptions<ApplicationContext> options, IConfiguration config) : base(options) =>
         _configuration = config;
     public DbSet<UserReport> Applications { get; set; }
+
+    public Task<int> SaveChangesAsync()
+    {
+        return base.SaveChangesAsync();
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("defaultConnection"));
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

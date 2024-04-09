@@ -1,6 +1,6 @@
 ﻿using Application.Dto.Activity;
 using Application.Interfaces;
-using NotionTestWork.Application;
+using NotionTestWork.Domain;
 
 namespace Application.Services.Activities;
 

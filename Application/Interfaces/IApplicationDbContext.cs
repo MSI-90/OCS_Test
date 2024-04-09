@@ -5,4 +5,5 @@ namespace Application.Interfaces;
 public interface IApplicationDbContext
 {
     DbSet<UserReport> Applications { get; set; }
+    Task<int> SaveChangesAsync();
 }

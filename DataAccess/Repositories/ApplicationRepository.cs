@@ -2,7 +2,7 @@
 using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
+using NotionTestWork.Domain.Models;
 using TestWorkForNotion.DataAccess;
 
 
@@ -13,51 +13,10 @@ public class ApplicationRepository : IApplicationRepository
     private readonly ApplicationContext _context;
     public ApplicationRepository(ApplicationContext context) => _context = context;
 
-    //Добавить новую заявку
-    public async Task<ApplicationResponse> CreateApplicationAsync(CreateApplicationRequest app)
+    //проверка на наличие у юзера уже имеющейся неотправленной заявки
+    public async Task<bool> ApplicationExistForUser(Guid userId)
     {
-        //var user = await _context.users.SingleOrDefaultAsync(u => u.Id == app.Author);
-        //if (user == null)
-        //    throw new Exception("Пользователь не нейден");
-        /*
-        var appTitle = await _context.applications.Where(a => a.Author == user)
-            .FirstOrDefaultAsync(a => a.Name == app.Name);
-
-        if (appTitle != null)
-            throw new Exception($"Уже имеется заявка, именуемая, как {app.Name}");
-
-        var isDraftApplication = await _context.applications.Include(a => a.Author).FirstOrDefaultAsync(a => a.IsSubmitted == false && a.Author.Id == user.Id);
-        if (isDraftApplication != null)
-            throw new Exception($"У Вас уже имеется заявка в статусе - не отправлена, идентификатор заявки - {isDraftApplication.Id}");
-
-        var newApplicationToDb = new Application
-        {
-            Id = Guid.NewGuid(),
-            Author = user,
-            Activity = app.Activity,
-            CreatedAt = DateTime.UtcNow,
-            Name = app.Name,
-            Description = app.Description,
-            Outline = app.Outline,
-            IsSubmitted = false
-        };
-
-        await _context.applications.AddAsync(newApplicationToDb);
-        await _context.SaveChangesAsync();
-
-        var newApplicationResponse = new ApplicationResponse
-        {
-            Id = newApplicationToDb.Id,
-            Author = user.Id,
-            Activity = newApplicationToDb.Activity,
-            Name = newApplicationToDb.Name,
-            Description = newApplicationToDb.Description,
-            Outline = newApplicationToDb.Outline
-        };
-
-        return newApplicationResponse;
-        */
-        return null;
+        return await _context.Applications.AnyAsync(a => a.IsSubmitted == false && a.Author == userId);
     }
 
     //Получить заявку по Id

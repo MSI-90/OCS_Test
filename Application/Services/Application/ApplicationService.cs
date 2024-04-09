@@ -2,31 +2,25 @@
 using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
 using Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using NotionTestWork.DataAccess.Repositories;
+using NotionTestWork.Domain.Models;
 
 namespace Application.Services.Application;
 public class ApplicationService : IApplicationService
 {
     private readonly IApplicationDbContext _context;
-    public Task<ApplicationResponse> CreateApplicationAsync(CreateApplicationRequest app)
+    private readonly IApplicationRepository _repository;
+    public async Task<ApplicationResponse> CreateApplicationAsync(CreateApplicationRequest app)
     {
-        //var user = await _context.users.SingleOrDefaultAsync(u => u.Id == app.Author);
-        //if (user == null)
-        //    throw new Exception("Пользователь не нейден");
-        /*
-        var appTitle = await _context.applications.Where(a => a.Author == user)
-            .FirstOrDefaultAsync(a => a.Name == app.Name);
+        bool applicationAsUnsubmitForUserExist = await _repository.ApplicationExistForUser(app.Author);
+        if (applicationAsUnsubmitForUserExist)
+            throw new Exception($"У Вас уже имеется заявка в статусе - не отправлена");
 
-        if (appTitle != null)
-            throw new Exception($"Уже имеется заявка, именуемая, как {app.Name}");
-
-        var isDraftApplication = await _context.applications.Include(a => a.Author).FirstOrDefaultAsync(a => a.IsSubmitted == false && a.Author.Id == user.Id);
-        if (isDraftApplication != null)
-            throw new Exception($"У Вас уже имеется заявка в статусе - не отправлена, идентификатор заявки - {isDraftApplication.Id}");
-
-        var newApplicationToDb = new Application
+        var newApplicationToDb = new UserReport
         {
             Id = Guid.NewGuid(),
-            Author = user,
+            Author = app.Author,
             Activity = app.Activity,
             CreatedAt = DateTime.UtcNow,
             Name = app.Name,
@@ -35,21 +29,24 @@ public class ApplicationService : IApplicationService
             IsSubmitted = false
         };
 
-        await _context.applications.AddAsync(newApplicationToDb);
+        await _context.Applications.AddAsync(newApplicationToDb);
         await _context.SaveChangesAsync();
 
         var newApplicationResponse = new ApplicationResponse
         {
             Id = newApplicationToDb.Id,
-            Author = user.Id,
+            Author = newApplicationToDb.Author,
             Activity = newApplicationToDb.Activity,
             Name = newApplicationToDb.Name,
             Description = newApplicationToDb.Description,
             Outline = newApplicationToDb.Outline
         };
-         return newApplicationResponse;
-        */
-        return null;
+        return newApplicationResponse;
+    }
+
+    public Task<ApplicationResponse> CreateApplicationAsync(CreateApplicationRequest app, CancellationToken token)
+    {
+        throw new NotImplementedException();
     }
 
     public Task DeleteApplicationById(Guid id)

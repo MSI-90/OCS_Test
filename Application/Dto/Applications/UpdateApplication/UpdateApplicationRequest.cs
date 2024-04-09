@@ -1,4 +1,4 @@
-﻿using NotionTestWork.Application;
+﻿using NotionTestWork.Domain;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dto.Applications.UpdateApplication;

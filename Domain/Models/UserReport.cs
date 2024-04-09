@@ -1,5 +1,4 @@
-﻿
-namespace NotionTestWork.Domain.Models;
+﻿namespace NotionTestWork.Domain.Models;
 
 public class UserReport
 {

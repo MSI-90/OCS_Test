@@ -1,4 +1,4 @@
-﻿using NotionTestWork.Application;
+﻿using NotionTestWork.Domain;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.Dto.Applications.CreateApplication;
@@ -6,7 +6,7 @@ namespace Application.Dto.Applications.CreateApplication;
 public class CreateApplicationRequest
 {
     [Required(ErrorMessage = "Обязательно к заполнению")]
-    public Guid Author { get; set; } = Guid.NewGuid();
+    public Guid Author { get; set; }
     public ActivityEnum Activity { get; set; } = ActivityEnum.Report;
 
     [Required(ErrorMessage = "Обязательно к заполнению")]
