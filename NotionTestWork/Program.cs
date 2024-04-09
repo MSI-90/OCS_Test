@@ -1,3 +1,4 @@
+using Application.Services;
 using Microsoft.EntityFrameworkCore;
 using NotionTestWork.Api.Middleware;
 using NotionTestWork.Application.Services;
@@ -23,7 +24,7 @@ public class Program
 
         //my_services
         builder.Services.AddScoped<IApplication, ApplicationRepo>();
-        builder.Services.AddSingleton<MyService>();
+        builder.Services.AddSingleton<IActivities, ActivitiesService>();
 
         var app = builder.Build();
 

@@ -13,9 +13,9 @@ namespace NotionTestWork.Api.Controllers;
 public class ApplicationsController : ControllerBase
 {
     private readonly APIResponse _response;
-    private readonly MyService _service;
+    private readonly ActivitiesService _service;
     private readonly IApplication _appRepo;
-    public ApplicationsController(IApplication repo, MyService service)
+    public ApplicationsController(IApplication repo, ActivitiesService service)
     {
         _appRepo = repo;
         _service = service;

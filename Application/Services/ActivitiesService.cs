@@ -1,11 +1,12 @@
 ﻿using Application.Dto.Activity;
+using Application.Services;
 
 namespace NotionTestWork.Application.Services;
 
-public class MyService
+public class ActivitiesService : IActivities
 {
     private readonly int ActivitiValues;
-    public MyService()
+    public ActivitiesService()
     {
         ActivitiValues = Enum.GetValues(typeof(ActivityEnum)).Length;
     }
