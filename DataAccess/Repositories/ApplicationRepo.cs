@@ -1,7 +1,7 @@
-﻿using Application.Dto.Create;
+﻿using Application.Dto.Applications;
+using Application.Dto.Applications.CreateApplication;
+using Application.Dto.Applications.UpdateApplication;
 using Microsoft.EntityFrameworkCore;
-using NotionTestWork.Application.Dto;
-using NotionTestWork.Application.Dto.Update;
 using System.Reflection;
 using TestWorkForNotion.DataAccess;
 

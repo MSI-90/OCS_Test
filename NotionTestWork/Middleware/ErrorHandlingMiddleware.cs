@@ -1,6 +1,4 @@
-﻿using MyTaskManager.Models;
-using NotionTestWork.Models;
-using System.Net;
+﻿using NotionTestWork.Models;
 using System.Text.Json;
 
 namespace NotionTestWork.Api.Middleware;

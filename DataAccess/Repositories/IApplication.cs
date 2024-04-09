@@ -1,6 +1,6 @@
-﻿using Application.Dto.Create;
-using NotionTestWork.Application.Dto;
-using NotionTestWork.Application.Dto.Update;
+﻿using Application.Dto.Applications;
+using Application.Dto.Applications.CreateApplication;
+using Application.Dto.Applications.UpdateApplication;
 
 namespace NotionTestWork.DataAccess.Repositories;
 

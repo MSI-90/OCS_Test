@@ -1,7 +1,7 @@
-﻿using Application.Dto.Create;
+﻿using Application.Dto;
+using Application.Dto.Applications.CreateApplication;
+using Application.Dto.Applications.UpdateApplication;
 using Microsoft.AspNetCore.Mvc;
-using MyTaskManager.Models;
-using NotionTestWork.Application.Dto.Update;
 using NotionTestWork.Application.Services;
 using NotionTestWork.DataAccess.Repositories;
 using System.Net;
@@ -40,7 +40,7 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreatApp([FromBody] CreateApplicationRequest newApp)
+    public async Task<IActionResult> CreateApplication([FromBody] CreateApplicationRequest newApp)
     {
         if (string.IsNullOrEmpty(newApp.Author.ToString()))
         {
@@ -74,7 +74,7 @@ public class ApplicationsController : ControllerBase
     [HttpDelete("{applicationId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteById(Guid applicationId)
+    public async Task<IActionResult> DeleteApplicationById(Guid applicationId)
     {
         var application = await _appRepo.GetApplicationById(applicationId);
         if (string.IsNullOrEmpty(application.Name))
@@ -87,7 +87,7 @@ public class ApplicationsController : ControllerBase
     [HttpPost("{applicationId:guid}/submit")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Submit(Guid applicationId)
+    public async Task<IActionResult> SubmitApplication(Guid applicationId)
     {
         var application = await _appRepo.GetApplicationById(applicationId);
         if (string.IsNullOrEmpty(application.Name))
@@ -100,7 +100,7 @@ public class ApplicationsController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Getpplications([FromQuery] DateTime? submittedAfter, [FromQuery] DateTime? unsubmittedOlder)
+    public async Task<IActionResult> GetApplications([FromQuery] DateTime? submittedAfter, [FromQuery] DateTime? unsubmittedOlder)
     {
         if (submittedAfter.HasValue && unsubmittedOlder.HasValue)
             return BadRequest();

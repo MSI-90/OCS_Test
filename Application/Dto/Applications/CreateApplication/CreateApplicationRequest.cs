@@ -1,7 +1,7 @@
 ﻿using NotionTestWork.Application;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Dto.Create;
+namespace Application.Dto.Applications.CreateApplication;
 
 public class CreateApplicationRequest
 {

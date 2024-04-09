@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NotionTestWork.Application;
+using System.ComponentModel.DataAnnotations;
 
-namespace NotionTestWork.Application.Dto.Update;
+namespace Application.Dto.Applications.UpdateApplication;
 
 public class UpdateApplicationRequest
 {

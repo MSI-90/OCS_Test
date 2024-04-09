@@ -1,4 +1,4 @@
-﻿namespace NotionTestWork.Models;
+﻿namespace Application.Dto.Activity;
 
 public class ActivitiesResponse
 {

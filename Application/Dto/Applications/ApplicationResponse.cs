@@ -1,4 +1,6 @@
-﻿namespace NotionTestWork.Application.Dto;
+﻿using NotionTestWork.Application;
+
+namespace Application.Dto.Applications;
 
 public class ApplicationResponse
 {

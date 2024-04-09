@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace MyTaskManager.Models;
+namespace Application.Dto;
 
 public class APIResponse
 {
