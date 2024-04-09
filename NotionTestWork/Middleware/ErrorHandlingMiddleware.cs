@@ -3,32 +3,31 @@ using NotionTestWork.Models;
 using System.Net;
 using System.Text.Json;
 
-namespace MyTaskManager.Middleware
+namespace NotionTestWork.Api.Middleware;
+
+internal class ErrorHandlingMiddleware
 {
-    internal class ErrorHandlingMiddleware
+    private readonly RequestDelegate _next;
+    public ErrorHandlingMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate _next;
-        public ErrorHandlingMiddleware(RequestDelegate next)
+        this._next = next;
+    }
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
         {
-            this._next = next;
+            await _next(context);
         }
-        public async Task InvokeAsync(HttpContext context)
+        catch (Exception ex)
         {
-            try
-            {
-                await _next(context);
-            }
-            catch (Exception ex)
-            {
-                await HandleExceptionAsync(context, ex);
-            }
+            await HandleExceptionAsync(context, ex);
         }
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
-        {
-            var response = new ExceptionRequest();
-            response.ErrorMessage.Add(exception.Message);
-            context.Response.ContentType = "application/json";
-            return context.Response.WriteAsync(JsonSerializer.Serialize(response));
-        }
+    }
+    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    {
+        var response = new ExceptionRequest();
+        response.ErrorMessage.Add(exception.Message);
+        context.Response.ContentType = "application/json";
+        return context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
 }
