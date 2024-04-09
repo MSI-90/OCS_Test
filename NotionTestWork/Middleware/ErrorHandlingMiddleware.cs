@@ -6,9 +6,11 @@ namespace NotionTestWork.Api.Middleware;
 internal class ErrorHandlingMiddleware
 {
     private readonly RequestDelegate _next;
-    public ErrorHandlingMiddleware(RequestDelegate next)
+    //private readonly ILogger _logger;
+    public ErrorHandlingMiddleware(RequestDelegate next /*ILogger logger*/)
     {
         this._next = next;
+        //_logger = logger;
     }
     public async Task InvokeAsync(HttpContext context)
     {
@@ -23,8 +25,9 @@ internal class ErrorHandlingMiddleware
     }
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
+        //_logger.LogError(exception.Message);
         var response = new ExceptionRequest();
-        response.ErrorMessage.Add(exception.Message);
+        response.ErrorMessage.Add("Упс, сто-то пошло ни так, попробуйте повторить операцию позднее!");
         context.Response.ContentType = "application/json";
         return context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }

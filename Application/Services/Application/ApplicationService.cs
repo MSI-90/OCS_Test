@@ -11,9 +11,14 @@ public class ApplicationService : IApplicationService
 {
     private readonly IApplicationDbContext _context;
     private readonly IApplicationRepository _repository;
+    public ApplicationService(IApplicationDbContext context, IApplicationRepository repository)
+    {
+        _context = context;
+        _repository = repository;
+    }
     public async Task<ApplicationResponse> CreateApplicationAsync(CreateApplicationRequest app)
     {
-        bool applicationAsUnsubmitForUserExist = await _repository.ApplicationExistForUser(app.Author);
+        bool applicationAsUnsubmitForUserExist = await _repository.ApplicationExistForUserAsync(app.Author);
         if (applicationAsUnsubmitForUserExist)
             throw new Exception($"У Вас уже имеется заявка в статусе - не отправлена");
 
@@ -29,7 +34,7 @@ public class ApplicationService : IApplicationService
             IsSubmitted = false
         };
 
-        await _context.Applications.AddAsync(newApplicationToDb);
+        _repository.CreateApplication(newApplicationToDb);
         await _context.SaveChangesAsync();
 
         var newApplicationResponse = new ApplicationResponse

@@ -14,9 +14,15 @@ public class ApplicationRepository : IApplicationRepository
     public ApplicationRepository(ApplicationContext context) => _context = context;
 
     //проверка на наличие у юзера уже имеющейся неотправленной заявки
-    public async Task<bool> ApplicationExistForUser(Guid userId)
+    public async Task<bool> ApplicationExistForUserAsync(Guid userId)
     {
         return await _context.Applications.AnyAsync(a => a.IsSubmitted == false && a.Author == userId);
+    }
+
+    //Создание заявки
+    public void CreateApplication(UserReport createRequest)
+    {
+        _context.Applications.Add(createRequest);
     }
 
     //Получить заявку по Id
