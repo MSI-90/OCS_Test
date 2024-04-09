@@ -22,7 +22,7 @@ namespace DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("NotionTestWork.Domain.Models.Application", b =>
+            modelBuilder.Entity("NotionTestWork.Domain.Models.Applications", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,7 +65,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("applications");
+                    b.ToTable("application", (string)null);
                 });
 #pragma warning restore 612, 618
         }

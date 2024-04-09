@@ -1,0 +1,8 @@
+﻿using NotionTestWork.Domain.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace Application.Interfaces;
+public interface IApplicationDbContext
+{
+    DbSet<UserReport> Applications { get; set; }
+}

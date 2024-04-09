@@ -12,8 +12,8 @@ using TestWorkForNotion.DataAccess;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240409040848_NamesOfColumnsUpdate")]
-    partial class NamesOfColumnsUpdate
+    [Migration("20240409121303_CreateDataBase")]
+    partial class CreateDataBase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("NotionTestWork.Domain.Models.Application", b =>
+            modelBuilder.Entity("NotionTestWork.Domain.Models.Applications", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("applications");
+                    b.ToTable("application", (string)null);
                 });
 #pragma warning restore 612, 618
         }

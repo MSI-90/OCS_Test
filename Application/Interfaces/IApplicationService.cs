@@ -1,10 +1,9 @@
-﻿using Application.Dto.Applications;
-using Application.Dto.Applications.CreateApplication;
+﻿using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
+using Application.Dto.Applications;
 
-namespace NotionTestWork.DataAccess.Repositories;
-
-public interface IApplication
+namespace Application.Interfaces;
+public interface IApplicationService
 {
     Task<ApplicationResponse> CreateApplicationAsync(CreateApplicationRequest app);
     Task<ApplicationResponse> GetApplicationById(Guid id);

@@ -8,10 +8,10 @@ using TestWorkForNotion.DataAccess;
 
 namespace NotionTestWork.DataAccess.Repositories;
 
-public class ApplicationRepo : IApplication
+public class ApplicationRepository : IApplicationRepository
 {
     private readonly ApplicationContext _context;
-    public ApplicationRepo(ApplicationContext context) => _context = context;
+    public ApplicationRepository(ApplicationContext context) => _context = context;
 
     //Добавить новую заявку
     public async Task<ApplicationResponse> CreateApplicationAsync(CreateApplicationRequest app)
@@ -26,9 +26,9 @@ public class ApplicationRepo : IApplication
         if (appTitle != null)
             throw new Exception($"Уже имеется заявка, именуемая, как {app.Name}");
 
-        var IsDraftApplication = await _context.applications.Include(a => a.Author).FirstOrDefaultAsync(a => a.IsSubmitted == false && a.Author.Id == user.Id);
-        if (IsDraftApplication != null)
-            throw new Exception($"У Вас уже имеется заявка в статусе - не отправлена, идентификатор заявки - {IsDraftApplication.Id}");
+        var isDraftApplication = await _context.applications.Include(a => a.Author).FirstOrDefaultAsync(a => a.IsSubmitted == false && a.Author.Id == user.Id);
+        if (isDraftApplication != null)
+            throw new Exception($"У Вас уже имеется заявка в статусе - не отправлена, идентификатор заявки - {isDraftApplication.Id}");
 
         var newApplicationToDb = new Application
         {

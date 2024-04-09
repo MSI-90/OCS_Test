@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace NotionTestWork.Models;
+namespace Application.Dto;
 
 public class ExceptionRequest
 {

@@ -1,4 +1,4 @@
-﻿using NotionTestWork.Models;
+﻿using Application.Dto;
 using System.Text.Json;
 
 namespace NotionTestWork.Api.Middleware;

@@ -1,8 +1,9 @@
 ﻿using Application.Dto;
 using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
+using Application.Interfaces;
+using Application.Services.Activities;
 using Microsoft.AspNetCore.Mvc;
-using NotionTestWork.Application.Services;
 using NotionTestWork.DataAccess.Repositories;
 using System.Net;
 
@@ -13,12 +14,12 @@ namespace NotionTestWork.Api.Controllers;
 public class ApplicationsController : ControllerBase
 {
     private readonly APIResponse _response;
-    private readonly ActivitiesService _service;
-    private readonly IApplication _appRepo;
-    public ApplicationsController(IApplication repo, ActivitiesService service)
+    private readonly IActivities _activities;
+    private readonly IApplicationRepository _appRepo;
+    public ApplicationsController(IApplicationRepository repo, IActivities activities)
     {
         _appRepo = repo;
-        _service = service;
+        _activities = activities;
         this._response = new();
     }
 
@@ -131,7 +132,7 @@ public class ApplicationsController : ControllerBase
     [HttpGet("/activities")]
     public IActionResult GetActivities()
     {
-        var result = _service.GetActivities();
+        var result = _activities.GetActivities();
         return Ok(result);
     }
 

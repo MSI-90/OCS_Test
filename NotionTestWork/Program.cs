@@ -1,7 +1,7 @@
-using Application.Services;
+using Application.Interfaces;
+using Application.Services.Activities;
 using Microsoft.EntityFrameworkCore;
 using NotionTestWork.Api.Middleware;
-using NotionTestWork.Application.Services;
 using NotionTestWork.DataAccess.Repositories;
 using TestWorkForNotion.DataAccess;
 
@@ -23,7 +23,7 @@ public class Program
         builder.Services.AddDbContext<ApplicationContext>();
 
         //my_services
-        builder.Services.AddScoped<IApplication, ApplicationRepo>();
+        builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
         builder.Services.AddSingleton<IActivities, ActivitiesService>();
 
         var app = builder.Build();
