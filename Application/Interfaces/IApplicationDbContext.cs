@@ -6,5 +6,5 @@ public interface IApplicationDbContext
 {
     DbSet<UserReport> Applications { get; set; }
     Task<int> SaveChangesAsync();
-    Task<int> SaveChangesAsync(CancellationToken token);
+    //Task<int> SaveChangesAsync(CancellationToken token);
 }

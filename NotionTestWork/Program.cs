@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Application.Services.Activities;
+using Application.Services.Application;
 using Microsoft.EntityFrameworkCore;
 using NotionTestWork.Api.Middleware;
 using NotionTestWork.DataAccess.Repositories;
@@ -19,11 +20,10 @@ public class Program
 
         builder.Services.AddSwaggerGen();
 
-        //EF_Core service
-        builder.Services.AddDbContext<ApplicationContext>();
+        builder.Services.AddDbContext<IApplicationDbContext, ApplicationContext>();
 
-        //my_services
-        builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+        builder.Services.AddTransient<IApplicationRepository, ApplicationRepository>();
+        builder.Services.AddTransient<IApplicationService, ApplicationService>();
         builder.Services.AddSingleton<IActivities, ActivitiesService>();
 
         var app = builder.Build();
@@ -41,7 +41,7 @@ public class Program
         app.UseSwaggerUI();
         //}
 
-        app.UseMiddleware<ErrorHandlingMiddleware>();
+        //app.UseMiddleware<ErrorHandlingMiddleware>();
 
         //app.UseHttpsRedirection();
         app.UseRouting();

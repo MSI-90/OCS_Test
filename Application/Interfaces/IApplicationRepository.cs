@@ -8,7 +8,7 @@ namespace NotionTestWork.DataAccess.Repositories;
 public interface IApplicationRepository
 {
     Task<bool> ApplicationExistForUserAsync(Guid userId);
-    void CreateApplication(UserReport createApplication);
+    Task CreateApplication(UserReport createApplication);
     //Task<ApplicationResponse> GetApplicationById(Guid id);
     //Task<ApplicationResponse> UpdateApplicationAsync(UpdateApplicationRequest newData, Guid id);
     //Task DeleteApplicationById(Guid id);

@@ -13,13 +13,14 @@ namespace NotionTestWork.Api.Controllers;
 [ApiController]
 public class ApplicationsController : ControllerBase
 {
-    private readonly APIResponse _response;
+    //private readonly APIResponse _response;
     private readonly IActivities _activities;
     private readonly IApplicationService _service;
-    public ApplicationsController(IApplicationRepository repo, IActivities activities)
+    public ApplicationsController(IApplicationService service, IActivities activities)
     {
         _activities = activities;
-        this._response = new();
+        _service = service;
+        //this._response = new();
     }
 
     [HttpGet("{applicationId:guid}")]
@@ -43,20 +44,22 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateApplication([FromBody] CreateApplicationRequest newApp)
     {
-        if (string.IsNullOrEmpty(newApp.Author.ToString()))
-        {
-            _response.StatusCode = HttpStatusCode.BadRequest;
-            _response.ErrorMessages.Add("Необходимо указать пользователя");
-            return BadRequest(_response);
-        }
+        var request = await _service.CreateApplicationAsync(newApp);
+        return Ok(request);
+        //if (string.IsNullOrEmpty(newApp.Author.ToString()))
+        //{
+        //    _response.StatusCode = HttpStatusCode.BadRequest;
+        //    _response.ErrorMessages.Add("Необходимо указать пользователя");
+        //    return BadRequest(_response);
+        //}
 
-        var responseFromBody = await _service.CreateApplicationAsync(newApp);
-        if (string.IsNullOrEmpty(responseFromBody.Name))
-        {
-            return NotFound();
-        }
+        //var responseFromBody = await _service.CreateApplicationAsync(newApp);
+        //if (string.IsNullOrEmpty(responseFromBody.Name))
+        //{
+        //    return NotFound();
+        //}
 
-        return Ok(responseFromBody);
+        //return Ok(responseFromBody);
     }
 
     [HttpPut("{applicationId:guid}")]

@@ -27,7 +27,7 @@ internal class ErrorHandlingMiddleware
     {
         //_logger.LogError(exception.Message);
         var response = new ExceptionRequest();
-        response.ErrorMessage.Add("Упс, сто-то пошло ни так, попробуйте повторить операцию позднее!");
+        response.ErrorMessage.Add(exception.Message); //"Упс, сто-то пошло ни так, попробуйте повторить операцию позднее!"
         context.Response.ContentType = "application/json";
         return context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }

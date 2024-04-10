@@ -20,9 +20,10 @@ public class ApplicationRepository : IApplicationRepository
     }
 
     //Создание заявки
-    public void CreateApplication(UserReport createRequest)
+    public async Task CreateApplication(UserReport createRequest)
     {
         _context.Applications.Add(createRequest);
+        await _context.SaveChangesAsync();
     }
 
     //Получить заявку по Id
