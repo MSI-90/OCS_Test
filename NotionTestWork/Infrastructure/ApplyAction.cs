@@ -2,6 +2,7 @@
 using Application.Dto.Applications;
 using Application.Dto.Applications.CreateApplication;
 using Application.Interfaces;
+using System.Net;
 using System.Reflection;
 
 namespace Api.Infrastructure;
@@ -19,6 +20,17 @@ public class ApplyAction : IApplyAction
         var response = await _service.CreateApplicationAsync(newApp);
         return response;
     }
+
+    public async Task<ApplicationResponse> GetById(Guid applicationId)
+    {
+        var response = await _service.GetApplicationById(applicationId);
+        if (string.IsNullOrEmpty(response.Name))
+        {
+            throw new MyValidationException($"Нет заявки под id = {applicationId}", HttpStatusCode.NotFound);
+        }
+        return response;
+    }
+
     public bool VerificationPropertyAsNullOrEmpty(CreateApplicationRequest application)
     {
         Type properties = application.GetType();

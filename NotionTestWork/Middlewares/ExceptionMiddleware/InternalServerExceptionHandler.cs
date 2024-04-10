@@ -1,12 +1,8 @@
-﻿using Application.Interfaces;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 using System.Text.Json;
 
 namespace Api.Middlewares.ExceptionMiddleware;
-
 public class InternalServerExceptionHandler : IExceptionHandler
 {
     private readonly ILogger<InternalServerExceptionHandler> _logger;

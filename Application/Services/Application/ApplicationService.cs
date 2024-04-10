@@ -4,7 +4,7 @@ using Application.Dto.Applications.UpdateApplication;
 using Application.Interfaces;
 using NotionTestWork.DataAccess.Repositories;
 using NotionTestWork.Domain.Models;
-using System.Reflection;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Application.Services.Application;
 public class ApplicationService : IApplicationService
@@ -46,14 +46,38 @@ public class ApplicationService : IApplicationService
         return newApplicationResponse;
     }
 
-    public Task DeleteApplicationById(Guid id)
+    public async Task DeleteApplicationById(Guid id)
     {
-        throw new NotImplementedException();
+
+        //var application = await _context.applications.SingleOrDefaultAsync(a => a.Id == id);
+        //if (application is not null && application.IsSubmitted == false)
+        //{
+        //    _context.applications.Remove(application);
+        //    await _context.SaveChangesAsync();
+        //}
+        //else
+        //{
+        //    throw new Exception("Заявка была отправлена на проверку и не может быть удалена");
+        //}
+
     }
 
-    public Task<ApplicationResponse> GetApplicationById(Guid id)
+    public async Task<ApplicationResponse> GetApplicationById(Guid id)
     {
-        throw new NotImplementedException();
+        var applicatoinFromRepository = await _repository.GetApplicationById(id);
+        if (applicatoinFromRepository != null && !string.IsNullOrEmpty(applicatoinFromRepository.Name))
+        {
+            return new ApplicationResponse
+            {
+                Id = applicatoinFromRepository.Id,
+                Author = applicatoinFromRepository.Author,
+                Activity = applicatoinFromRepository.Activity,
+                Name = applicatoinFromRepository.Name,
+                Description = applicatoinFromRepository.Description,
+                Outline = applicatoinFromRepository.Outline
+            };
+        }
+        return new ApplicationResponse();
     }
 
     public Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date)
