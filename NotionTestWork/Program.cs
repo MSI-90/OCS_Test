@@ -1,8 +1,9 @@
+using Api.Infrastructure;
+using Api.Middlewares.ExceptionMiddleware;
 using Application.Interfaces;
 using Application.Services.Activities;
 using Application.Services.Application;
 using Microsoft.EntityFrameworkCore;
-using NotionTestWork.Api.Middleware;
 using NotionTestWork.DataAccess.Repositories;
 using TestWorkForNotion.DataAccess;
 
@@ -24,7 +25,11 @@ public class Program
 
         builder.Services.AddTransient<IApplicationRepository, ApplicationRepository>();
         builder.Services.AddTransient<IApplicationService, ApplicationService>();
+        builder.Services.AddTransient<IApplyAction, ApplyAction>();
         builder.Services.AddSingleton<IActivities, ActivitiesService>();
+
+        builder.Services.AddExceptionHandler<ValidatonExceptionHandler>();
+        builder.Services.AddExceptionHandler<InternalServerExceptionHandler>();
 
         var app = builder.Build();
 
@@ -41,7 +46,7 @@ public class Program
         app.UseSwaggerUI();
         //}
 
-        //app.UseMiddleware<ErrorHandlingMiddleware>();
+        app.UseExceptionHandler("/errors");
 
         //app.UseHttpsRedirection();
         app.UseRouting();

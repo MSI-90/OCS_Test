@@ -2,11 +2,9 @@
 using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
 using Application.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using NotionTestWork.DataAccess.Repositories;
 using NotionTestWork.Domain.Models;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Application.Services.Application;
 public class ApplicationService : IApplicationService
@@ -18,10 +16,6 @@ public class ApplicationService : IApplicationService
     }
     public async Task<ApplicationResponse> CreateApplicationAsync(CreateApplicationRequest app)
     {
-        var stringIsOk = VerificationPropertyAsNullOrEmpty(app);
-        if (!stringIsOk)
-            throw new Exception("Ошибка при создании заявки, проверьте степень заполнения полей перед созданием заявки.");
-
         bool applicationAsUnsubmitForUserExist = await _repository.ApplicationExistForUserAsync(app.Author);
         if (applicationAsUnsubmitForUserExist)
             throw new Exception("У Вас уже имеется заявка в статусе - не отправлена");
@@ -50,11 +44,6 @@ public class ApplicationService : IApplicationService
             Outline = newApplicationToDb.Outline
         };
         return newApplicationResponse;
-    }
-
-    public Task<ApplicationResponse> CreateApplicationAsync(CreateApplicationRequest app, CancellationToken token)
-    {
-        throw new NotImplementedException();
     }
 
     public Task DeleteApplicationById(Guid id)
@@ -90,25 +79,5 @@ public class ApplicationService : IApplicationService
     public Task<ApplicationResponse> UpdateApplicationAsync(UpdateApplicationRequest newData, Guid id)
     {
         throw new NotImplementedException();
-    }
-    public bool VerificationPropertyAsNullOrEmpty(CreateApplicationRequest application)
-    {
-        Type properties = application.GetType();
-        PropertyInfo[] propertyInfo = properties.GetProperties();
-        var values = new List<string>();
-        foreach (var item in propertyInfo)
-        {
-            var value = item.GetValue(application);
-            values.Add(value?.ToString() ?? string.Empty);
-        }
-
-        foreach (var item in values)
-        {
-            if (string.IsNullOrEmpty(item) || string.IsNullOrWhiteSpace(item))
-            {
-                return false;
-            }
-        }
-        return true;
     }
 }

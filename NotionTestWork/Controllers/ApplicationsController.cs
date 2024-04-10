@@ -1,11 +1,9 @@
-﻿using Application.Dto;
+﻿using Api.Infrastructure;
+using Api.Middlewares.ExceptionMiddleware;
 using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
 using Application.Interfaces;
-using Application.Services.Activities;
 using Microsoft.AspNetCore.Mvc;
-using NotionTestWork.DataAccess.Repositories;
-using System.Net;
 
 namespace NotionTestWork.Api.Controllers;
 
@@ -13,13 +11,12 @@ namespace NotionTestWork.Api.Controllers;
 [ApiController]
 public class ApplicationsController : ControllerBase
 {
-    //private readonly APIResponse _response;
     private readonly IActivities _activities;
-    private readonly IApplicationService _service;
-    public ApplicationsController(IApplicationService service, IActivities activities)
+    private readonly IApplyAction _action;
+    public ApplicationsController(IApplyAction action, IActivities activities)
     {
         _activities = activities;
-        _service = service;
+        _action = action;
         //this._response = new();
     }
 
@@ -44,8 +41,9 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateApplication([FromBody] CreateApplicationRequest newApp)
     {
-        var request = await _service.CreateApplicationAsync(newApp);
+        var request = await _action.CreateOrNot(newApp);
         return Ok(request);
+
         //if (string.IsNullOrEmpty(newApp.Author.ToString()))
         //{
         //    _response.StatusCode = HttpStatusCode.BadRequest;
