@@ -11,8 +11,8 @@ public interface IApplicationService
     Task<ApplicationResponse> UpdateApplicationAsync(UpdateApplicationRequest newData, Guid id);
     Task DeleteApplicationById(Guid id);
     Task SendApplicationAsync(Guid id);
-    Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date);
-    Task<IEnumerable<ApplicationResponse>> GetUnsobmitedApplicationAsync(DateTime date);
+    Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime? date);
+    Task<IEnumerable<ApplicationResponse>> GetUnsobmitedApplicationAsync(DateTime? date);
     Task<ApplicationResponse> GetCurrentApplication(Guid id);
     bool VerificationPropertyAsNullOrEmpty(CreateApplicationRequest application);
     bool VerificationPropertyAsNullOrEmpty(UserReport application);

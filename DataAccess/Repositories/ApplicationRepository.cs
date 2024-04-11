@@ -55,49 +55,19 @@ public class ApplicationRepository : IApplicationRepository
         await _context.SaveChangesAsync();
     }
 
-    //получаем отправленные заявки поданые после указаной даты
-    //public async Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date)
-    //{
-    /*
-    var dateTime = date.ToUniversalTime();
-    var application = await _context.applications.Include(a => a.Author).Where(a => a.CreatedAt > dateTime && a.IsSubmitted).ToListAsync();
-
-    var aapplicationResponses = application.Select(a => new ApplicationResponse
+    public async Task<IEnumerable<UserReport>> GetApplicationIfSubmittedAsync(DateTime date)
     {
-        Id = a.Id,
-        Author = a.Author.Id,
-        Activity = a.Activity,
-        Name = a.Name,
-        Description = a.Description,
-        Outline = a.Outline
-    });
+        var dateTime = date.ToUniversalTime();
+        var application = await _context.Applications.Where(a => a.CreatedAt > dateTime && a.IsSubmitted).ToListAsync();
+        return application;
+    }
 
-    return aapplicationResponses;
-    
-    //    return null;
-    //}
-
-    //получаем не поданые заявки и старше указаной даты
-    //public async Task<IEnumerable<ApplicationResponse>> GetUnsobmitedApplicationAsync(DateTime date)
-    //{
-    /*
-    var dateTime = date.ToUniversalTime();
-    var application = await _context.applications.Include(a => a.Author).Where(a => a.CreatedAt > dateTime && a.IsSubmitted == false).ToListAsync();
-
-    var aapplicationResponses = application.Select(a => new ApplicationResponse
+    public async Task<IEnumerable<UserReport>> GetUnsobmitedApplicationAsync(DateTime date)
     {
-        Id = a.Id,
-        Author = a.Author.Id,
-        Activity = a.Activity,
-        Name = a.Name,
-        Description = a.Description,
-        Outline = a.Outline
-    });
-
-    return aapplicationResponses;
-    */
-    //    return null;
-    //}
+        var dateTime = date.ToUniversalTime();
+        var application = await _context.Applications.Where(a => a.CreatedAt < dateTime && a.IsSubmitted == false).ToListAsync();
+        return application;
+    }
 
     //public async Task<ApplicationResponse> GetCurrentApplication(Guid id)
     //{

@@ -20,7 +20,7 @@ public class ApplicationsController : ControllerBase
     [HttpGet("{applicationId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(Guid applicationId)
+    public async Task<IActionResult> GetApplicationById(Guid applicationId)
     {
         var request = await _service.GetApplicationById(applicationId);
         return Ok(request);
@@ -47,12 +47,14 @@ public class ApplicationsController : ControllerBase
 
     [HttpDelete("{applicationId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteApplicationById(Guid applicationId)
     {
         await _service.DeleteApplicationById(applicationId);
         return Ok();
     }
+
 
     [HttpPost("{applicationId:guid}/submit")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -62,31 +64,26 @@ public class ApplicationsController : ControllerBase
         await _service.SendApplicationAsync(applicationId);
         return Ok();
     }
-    /*
+
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetApplications([FromQuery] DateTime? submittedAfter, [FromQuery] DateTime? unsubmittedOlder)
+    public async Task<IActionResult> GetSubmittedApplications([FromQuery] DateTime? submittedAfter /*[FromQuery] DateTime? unsubmittedOlder*/)
     {
-        //if (submittedAfter.HasValue && unsubmittedOlder.HasValue)
-        //    return BadRequest();
-
-        //if (submittedAfter.HasValue)
-        //{
-        //    var result = await _appRepo.GetApplicationIfSubmittedAsync(submittedAfter.Value);
-        //    return Ok(result);
-        //}
-        //else if (unsubmittedOlder.HasValue)
-        //{
-        //    var result = await _appRepo.GetUnsobmitedApplicationAsync(unsubmittedOlder.Value);
-        //    return Ok(result);
-        //}
-        //else
-        //    return BadRequest();
-        return Ok();
+        var request = await _service.GetApplicationIfSubmittedAsync(submittedAfter);
+        return Ok(request);
     }
 
+    //[HttpGet]
+    //[ProducesResponseType(StatusCodes.Status200OK)]
+    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+    //public async Task<IActionResult> GetUnsubmittedApplications([FromQuery] DateTime? unsubmittedOlder)
+    //{
+    //    var request = await _service.GetUnsobmitedApplicationAsync(unsubmittedOlder);
+    //    return Ok(request);
+    //}
 
+    /*
     [HttpGet("/users/{userId:guid}/currentapplication")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCurrentApplication(Guid userId)
@@ -95,12 +92,11 @@ public class ApplicationsController : ControllerBase
         //return Ok(result);
         return Ok();
     }
-
+    */
     [HttpGet("/activities")]
     public IActionResult GetActivities()
     {
         var result = _activities.GetActivities();
         return Ok(result);
     }
-    */
 }

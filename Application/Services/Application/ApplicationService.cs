@@ -9,6 +9,7 @@ using NotionTestWork.Domain.Models;
 using System;
 using System.Net;
 using System.Reflection;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Application.Services.Application;
 public class ApplicationService : IApplicationService
@@ -120,19 +121,53 @@ public class ApplicationService : IApplicationService
         await _repository.SendApplicationAsync(application);
     }
 
-    public Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date)
+    public async Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime? date)
     {
-        throw new NotImplementedException();
+        if (!date.HasValue)
+            return Enumerable.Empty<ApplicationResponse>();
+
+        var getSubmittedApplications = await _repository.GetApplicationIfSubmittedAsync(date.Value);
+        if (getSubmittedApplications is null)
+            throw new MyValidationException($"Нет заявок, удовлетворяющих условию: заявки поданы после {date.Value}");
+
+        var applicationsSubmittedAfteDate = getSubmittedApplications.Select(a => new ApplicationResponse
+        {
+            Id = a.Id,
+            Author = a.Author,
+            Activity = a.Activity,
+            Name = a.Name,
+            Description = a.Description,
+            Outline = a.Outline
+        });
+
+        return applicationsSubmittedAfteDate;
     }
 
-    public Task<ApplicationResponse> GetCurrentApplication(Guid id)
+    public async Task<IEnumerable<ApplicationResponse>> GetUnsobmitedApplicationAsync(DateTime? date)
     {
-        throw new NotImplementedException();
+        if (!date.HasValue)
+            return Enumerable.Empty<ApplicationResponse>();
+
+        var getUnsubmittedApplications = await _repository.GetUnsobmitedApplicationAsync(date.Value);
+        if (getUnsubmittedApplications is null)
+            throw new MyValidationException($"Нет заявок, удовлетворяющих условию: заявки поданы после {date.Value}");
+
+        var applicationsSubmittedAfteDate = getUnsubmittedApplications.Select(a => new ApplicationResponse
+        {
+            Id = a.Id,
+            Author = a.Author,
+            Activity = a.Activity,
+            Name = a.Name,
+            Description = a.Description,
+            Outline = a.Outline
+        });
+
+        return applicationsSubmittedAfteDate;
     }
 
-    public Task<IEnumerable<ApplicationResponse>> GetUnsobmitedApplicationAsync(DateTime date)
+    public async Task<ApplicationResponse> GetCurrentApplication(Guid id)
     {
-        throw new NotImplementedException();
+        return null;
     }
 
     public bool VerificationPropertyAsNullOrEmpty(CreateApplicationRequest application)

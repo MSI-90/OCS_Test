@@ -10,7 +10,7 @@ public interface IApplicationRepository
     Task<UserReport> UpdateApplicationAsync(UpdateApplicationRequest newData, UserReport oldData, Guid id);
     Task DeleteApplicationById(UserReport application);
     Task SendApplicationAsync(UserReport application);
-    //Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date);
-    //Task<IEnumerable<ApplicationResponse>> GetUnsobmitedApplicationAsync(DateTime date);
+    Task<IEnumerable<UserReport>> GetApplicationIfSubmittedAsync(DateTime date);
+    Task<IEnumerable<UserReport>> GetUnsobmitedApplicationAsync(DateTime date);
     //Task<ApplicationResponse> GetCurrentApplication(Guid id);
 }
