@@ -30,73 +30,52 @@ public class ApplicationRepository : IApplicationRepository
         return application;
     }
 
-    //отредактировать заявку
-    //public async Task<ApplicationResponse> UpdateApplicationAsync(UpdateApplicationRequest newData, Guid id)
-    //{
-    /*
-    var applicationFrorUpdate = await _context.applications.Include(a => a.Author).SingleOrDefaultAsync(a => a.Id == id);
-    if (applicationFrorUpdate.IsSubmitted == true)
-        throw new Exception("Данная заявка не может быть отредактирована, потому, что она была уже отправлена на проверку");
-
-    if (applicationFrorUpdate != null)
+    public async Task<UserReport> UpdateApplicationAsync(UpdateApplicationRequest newData, UserReport oldData, Guid id)
     {
-        applicationFrorUpdate.Activity = newData.Activity;
-        applicationFrorUpdate.Name = string.IsNullOrEmpty(newData.Name) ? applicationFrorUpdate.Name : newData.Name;
-        applicationFrorUpdate.Description = string.IsNullOrEmpty(newData.Description) ? applicationFrorUpdate.Description : newData.Description;
-        applicationFrorUpdate.Outline = string.IsNullOrEmpty(newData.Outline) ? applicationFrorUpdate.Outline : newData.Outline;
-        applicationFrorUpdate.CreatedAt = DateTime.UtcNow;
+        oldData.Activity = newData.Activity;
+        oldData.Name = string.IsNullOrEmpty(newData.Name) ? oldData.Name : newData.Name;
+        oldData.Description = string.IsNullOrEmpty(newData.Description) ? oldData.Description : newData.Description;
+        oldData.Outline = string.IsNullOrEmpty(newData.Outline) ? oldData.Outline : newData.Outline;
+        oldData.CreatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
-
-        return new ApplicationResponse
-        {
-            Id = applicationFrorUpdate.Id,
-            Author = applicationFrorUpdate.Author.Id,
-            Activity = applicationFrorUpdate.Activity,
-            Name = applicationFrorUpdate.Name,
-            Description = applicationFrorUpdate.Description,
-            Outline = applicationFrorUpdate.Outline
-        };
+        return oldData;
     }
 
-    return new ApplicationResponse();
-
-    return null;
-}
-
-//удалить заявку по Id
-public async Task DeleteApplicationById(Guid id)
-{
-
-}
-
-//отправить заявку на проверку программным комитетом
-public async Task SendApplicationAsync(Guid id)
-{
-    /*
-    var application = await _context.applications.SingleOrDefaultAsync(application => application.Id == id);
-
-    if (application.IsSubmitted == true)
-        throw new Exception("Данная заявка уже была отправлена на проверку ранее");
-
-    Type propertyAsList = application.GetType();
-    PropertyInfo[] properties = propertyAsList.GetProperties();
-    var values = new List<string>();
-
-    foreach (var item in properties)
-        values.Add(item.GetValue(application)?.ToString() ?? string.Empty);
-
-    foreach (var item in values)
+    //удалить заявку по Id
+    public async Task DeleteApplicationById(Guid id)
     {
-        if (string.IsNullOrEmpty(item) || item.Equals("string"))
-        {
-            throw new Exception("Приведите заявку в корректный вид (не заполнены или некорректно заполнены поля), и после этого можете поаторить отправку");
-        }
+
     }
 
-    application.IsSubmitted = true;
-    await _context.SaveChangesAsync();
-    */
+    //отправить заявку на проверку программным комитетом
+    /*
+    public async Task SendApplicationAsync(Guid id)
+    {
+        /*
+        var application = await _context.applications.SingleOrDefaultAsync(application => application.Id == id);
+
+        if (application.IsSubmitted == true)
+            throw new Exception("Данная заявка уже была отправлена на проверку ранее");
+
+        Type propertyAsList = application.GetType();
+        PropertyInfo[] properties = propertyAsList.GetProperties();
+        var values = new List<string>();
+
+        foreach (var item in properties)
+            values.Add(item.GetValue(application)?.ToString() ?? string.Empty);
+
+        foreach (var item in values)
+        {
+            if (string.IsNullOrEmpty(item) || item.Equals("string"))
+            {
+                throw new Exception("Приведите заявку в корректный вид (не заполнены или некорректно заполнены поля), и после этого можете поаторить отправку");
+            }
+        }
+
+        application.IsSubmitted = true;
+        await _context.SaveChangesAsync();
+        */
     //}
 
     //получаем отправленные заявки поданые после указаной даты

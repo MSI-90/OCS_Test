@@ -19,8 +19,8 @@ public class ApplicationsController : ControllerBase
 
     [HttpGet("{applicationId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetById(Guid applicationId)
     {
         var request = await _service.GetApplicationById(applicationId);
@@ -42,15 +42,10 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateApplication([FromBody] UpdateApplicationRequest newApplication, Guid applicationId)
     {
-        //var getApplication = await _appRepo.GetApplicationById(applicationId);
-        //if (string.IsNullOrEmpty(getApplication.Name))
-        //    return NotFound();
-
-        //var update = await _appRepo.UpdateApplicationAsync(newApplication, applicationId);
-        //return Ok(update);
-        return Ok();
+        var request = await _service.UpdateApplicationAsync(newApplication, applicationId);
+        return Ok(request);
     }
-
+    /*
     [HttpDelete("{applicationId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -118,5 +113,5 @@ public class ApplicationsController : ControllerBase
         var result = _activities.GetActivities();
         return Ok(result);
     }
-
+    */
 }

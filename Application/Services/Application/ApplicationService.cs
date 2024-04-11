@@ -6,7 +6,6 @@ using Application.MyException;
 using NotionTestWork.DataAccess.Repositories;
 using NotionTestWork.Domain.Models;
 using System.Net;
-using System;
 using System.Reflection;
 
 namespace Application.Services.Application;
@@ -73,9 +72,7 @@ public class ApplicationService : IApplicationService
     {
         var applicatoinFromRepository = await _repository.GetApplicationById(id);
         if (applicatoinFromRepository is null)
-        {
             throw new MyValidationException($"Нет заявки под id = {id}", HttpStatusCode.NotFound);
-        }
 
         return new ApplicationResponse
         {
@@ -86,8 +83,27 @@ public class ApplicationService : IApplicationService
             Description = applicatoinFromRepository.Description,
             Outline = applicatoinFromRepository.Outline
         };
+    }
 
-        //return new ApplicationResponse();
+    public async Task<ApplicationResponse> UpdateApplicationAsync(UpdateApplicationRequest newData, Guid id)
+    {
+        var applicationFrorUpdate = await _repository.GetApplicationById(id);
+        if (applicationFrorUpdate is null)
+            throw new MyValidationException($"Нет заявки под id = {id}", HttpStatusCode.NotFound);
+
+        if (applicationFrorUpdate.IsSubmitted == true)
+            throw new MyValidationException("Данная заявка не может быть отредактирована, потому, что она была уже отправлена на проверку");
+
+        var updatedApplication = await _repository.UpdateApplicationAsync(newData, applicationFrorUpdate, id);
+        return new ApplicationResponse
+        {
+            Id = updatedApplication.Id,
+            Author = updatedApplication.Author,
+            Activity = updatedApplication.Activity,
+            Name = updatedApplication.Name,
+            Description = updatedApplication.Description,
+            Outline = updatedApplication.Outline
+        };
     }
 
     public Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date)
@@ -106,11 +122,6 @@ public class ApplicationService : IApplicationService
     }
 
     public Task SendApplicationAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<ApplicationResponse> UpdateApplicationAsync(UpdateApplicationRequest newData, Guid id)
     {
         throw new NotImplementedException();
     }
