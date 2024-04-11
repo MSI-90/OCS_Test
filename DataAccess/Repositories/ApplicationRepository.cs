@@ -4,6 +4,7 @@ using Application.Dto.Applications.UpdateApplication;
 using Microsoft.EntityFrameworkCore;
 using NotionTestWork.Domain.Models;
 using TestWorkForNotion.DataAccess;
+using static System.Net.Mime.MediaTypeNames;
 
 
 namespace NotionTestWork.DataAccess.Repositories;
@@ -42,41 +43,17 @@ public class ApplicationRepository : IApplicationRepository
         return oldData;
     }
 
-    //удалить заявку по Id
-    public async Task DeleteApplicationById(Guid id)
+    public async Task DeleteApplicationById(UserReport application)
     {
-
+        _context.Applications.Remove(application);
+        await _context.SaveChangesAsync();
     }
 
-    //отправить заявку на проверку программным комитетом
-    /*
-    public async Task SendApplicationAsync(Guid id)
+    public async Task SendApplicationAsync(UserReport application)
     {
-        /*
-        var application = await _context.applications.SingleOrDefaultAsync(application => application.Id == id);
-
-        if (application.IsSubmitted == true)
-            throw new Exception("Данная заявка уже была отправлена на проверку ранее");
-
-        Type propertyAsList = application.GetType();
-        PropertyInfo[] properties = propertyAsList.GetProperties();
-        var values = new List<string>();
-
-        foreach (var item in properties)
-            values.Add(item.GetValue(application)?.ToString() ?? string.Empty);
-
-        foreach (var item in values)
-        {
-            if (string.IsNullOrEmpty(item) || item.Equals("string"))
-            {
-                throw new Exception("Приведите заявку в корректный вид (не заполнены или некорректно заполнены поля), и после этого можете поаторить отправку");
-            }
-        }
-
         application.IsSubmitted = true;
         await _context.SaveChangesAsync();
-        */
-    //}
+    }
 
     //получаем отправленные заявки поданые после указаной даты
     //public async Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date)
@@ -96,7 +73,7 @@ public class ApplicationRepository : IApplicationRepository
     });
 
     return aapplicationResponses;
-    */
+    
     //    return null;
     //}
 

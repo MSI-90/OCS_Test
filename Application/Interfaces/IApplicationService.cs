@@ -1,6 +1,7 @@
 ﻿using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
 using Application.Dto.Applications;
+using NotionTestWork.Domain.Models;
 
 namespace Application.Interfaces;
 public interface IApplicationService
@@ -14,4 +15,5 @@ public interface IApplicationService
     Task<IEnumerable<ApplicationResponse>> GetUnsobmitedApplicationAsync(DateTime date);
     Task<ApplicationResponse> GetCurrentApplication(Guid id);
     bool VerificationPropertyAsNullOrEmpty(CreateApplicationRequest application);
+    bool VerificationPropertyAsNullOrEmpty(UserReport application);
 }

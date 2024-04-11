@@ -3,8 +3,10 @@ using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
 using Application.Interfaces;
 using Application.MyException;
+using Microsoft.EntityFrameworkCore;
 using NotionTestWork.DataAccess.Repositories;
 using NotionTestWork.Domain.Models;
+using System;
 using System.Net;
 using System.Reflection;
 
@@ -54,18 +56,14 @@ public class ApplicationService : IApplicationService
 
     public async Task DeleteApplicationById(Guid id)
     {
+        var applicationExist = await _repository.GetApplicationById(id);
+        if (applicationExist is null)
+            throw new MyValidationException($"Нет заявки под id = {id}", HttpStatusCode.NotFound);
 
-        //var application = await _context.applications.SingleOrDefaultAsync(a => a.Id == id);
-        //if (application is not null && application.IsSubmitted == false)
-        //{
-        //    _context.applications.Remove(application);
-        //    await _context.SaveChangesAsync();
-        //}
-        //else
-        //{
-        //    throw new Exception("Заявка была отправлена на проверку и не может быть удалена");
-        //}
+        if (applicationExist.IsSubmitted == true)
+            throw new MyValidationException("Заявка была отправлена на проверку и не может быть удалена");
 
+        await _repository.DeleteApplicationById(applicationExist);
     }
 
     public async Task<ApplicationResponse> GetApplicationById(Guid id)
@@ -106,6 +104,22 @@ public class ApplicationService : IApplicationService
         };
     }
 
+    public async Task SendApplicationAsync(Guid id)
+    {
+        var application = await _repository.GetApplicationById(id);
+        if (application is null)
+            throw new MyValidationException($"Нет заявки под id = {id}", HttpStatusCode.NotFound);
+
+        if (application.IsSubmitted == true)
+            throw new MyValidationException("Данная заявка уже была отправлена на проверку ранее");
+
+        var stringIsOk = VerificationPropertyAsNullOrEmpty(application);
+        if (!stringIsOk)
+            throw new MyValidationException("Проверьте, все ли поля корректно заполнены перед отправкой заявки на проверку.");
+
+        await _repository.SendApplicationAsync(application);
+    }
+
     public Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date)
     {
         throw new NotImplementedException();
@@ -117,11 +131,6 @@ public class ApplicationService : IApplicationService
     }
 
     public Task<IEnumerable<ApplicationResponse>> GetUnsobmitedApplicationAsync(DateTime date)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task SendApplicationAsync(Guid id)
     {
         throw new NotImplementedException();
     }
@@ -140,6 +149,26 @@ public class ApplicationService : IApplicationService
         foreach (var item in values)
         {
             if (string.IsNullOrEmpty(item) || string.IsNullOrWhiteSpace(item))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public bool VerificationPropertyAsNullOrEmpty(UserReport application)
+    {
+        Type properties = application.GetType();
+        PropertyInfo[] propertyInfo = properties.GetProperties();
+        var values = new List<string>();
+        foreach (var item in propertyInfo)
+        {
+            var value = item.GetValue(application);
+            values.Add(value?.ToString() ?? string.Empty);
+        }
+
+        foreach (var item in values)
+        {
+            if (string.IsNullOrEmpty(item) || string.IsNullOrWhiteSpace(item) || item.Equals("string"))
             {
                 return false;
             }
