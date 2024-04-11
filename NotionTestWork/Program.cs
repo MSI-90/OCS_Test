@@ -1,4 +1,6 @@
 using Api.Middlewares.ExceptionMiddleware;
+using Api.Orchestrator;
+using Application.Dto;
 using Application.Interfaces;
 using Application.Services.Activities;
 using Application.Services.Application;
@@ -25,6 +27,7 @@ public class Program
         builder.Services.AddTransient<IApplicationRepository, ApplicationRepository>();
         builder.Services.AddTransient<IApplicationService, ApplicationService>();
         builder.Services.AddSingleton<IActivities, ActivitiesService>();
+        builder.Services.AddTransient<HandlerBase<ApplicationsFromDateQuery>, GetDateTimeAsQueryHandlercs>();
 
         builder.Services.AddExceptionHandler<ValidatonExceptionHandler>();
         builder.Services.AddExceptionHandler<InternalServerExceptionHandler>();

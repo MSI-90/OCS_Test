@@ -1,4 +1,6 @@
-﻿using Application.Dto.Applications.CreateApplication;
+﻿using Api.Orchestrator;
+using Application.Dto;
+using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +13,12 @@ public class ApplicationsController : ControllerBase
 {
     private readonly IActivities _activities;
     private readonly IApplicationService _service;
-    public ApplicationsController(IApplicationService service, IActivities activities)
+    private readonly HandlerBase<ApplicationsFromDateQuery> _getDateTimeAsQueryHandlercs;
+    public ApplicationsController(IApplicationService service, IActivities activities, HandlerBase<ApplicationsFromDateQuery> getDateTimeAsQueryHandlercs)
     {
         _activities = activities;
         _service = service;
+        _getDateTimeAsQueryHandlercs = getDateTimeAsQueryHandlercs;
     }
 
     [HttpGet("{applicationId:guid}")]
@@ -68,9 +72,10 @@ public class ApplicationsController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetSubmittedApplications([FromQuery] DateTime? submittedAfter /*[FromQuery] DateTime? unsubmittedOlder*/)
+    public async Task<IActionResult> GetSubmittedApplications([FromQuery] ApplicationsFromDateQuery query)
     {
-        var request = await _service.GetApplicationIfSubmittedAsync(submittedAfter);
+        var request = await _getDateTimeAsQueryHandlercs.Handler(query);
+        //var request = await _service.GetApplicationIfSubmittedAsync(submittedAfter);
         return Ok(request);
     }
 
