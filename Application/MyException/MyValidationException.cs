@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Api.Middlewares.ExceptionMiddleware;
+namespace Application.MyException;
 public class MyValidationException : Exception
 {
     public List<string> ServerMessage { get; set; } = new List<string>();

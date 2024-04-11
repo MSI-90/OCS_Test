@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
-using System.Net;
+﻿using Application.MyException;
+using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json;
 
 namespace Api.Middlewares.ExceptionMiddleware;

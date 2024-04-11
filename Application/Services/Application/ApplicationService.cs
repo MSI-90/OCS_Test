@@ -2,9 +2,9 @@
 using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
 using Application.Interfaces;
+using Application.MyException;
 using NotionTestWork.DataAccess.Repositories;
 using NotionTestWork.Domain.Models;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Application.Services.Application;
 public class ApplicationService : IApplicationService
@@ -18,7 +18,7 @@ public class ApplicationService : IApplicationService
     {
         bool applicationAsUnsubmitForUserExist = await _repository.ApplicationExistForUserAsync(app.Author);
         if (applicationAsUnsubmitForUserExist)
-            throw new Exception("У Вас уже имеется заявка в статусе - не отправлена");
+            throw new MyValidationException("У Вас уже имеется заявка в статусе - не отправлена");
 
         var newApplicationToDb = new UserReport
         {

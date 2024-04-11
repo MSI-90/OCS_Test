@@ -2,6 +2,7 @@
 using Application.Dto.Applications;
 using Application.Dto.Applications.CreateApplication;
 using Application.Interfaces;
+using Application.MyException;
 using System.Net;
 using System.Reflection;
 
