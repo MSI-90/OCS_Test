@@ -13,4 +13,5 @@ public interface IApplicationService
     Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date);
     Task<IEnumerable<ApplicationResponse>> GetUnsobmitedApplicationAsync(DateTime date);
     Task<ApplicationResponse> GetCurrentApplication(Guid id);
+    bool VerificationPropertyAsNullOrEmpty(CreateApplicationRequest application);
 }

@@ -1,4 +1,3 @@
-using Api.Infrastructure;
 using Api.Middlewares.ExceptionMiddleware;
 using Application.Interfaces;
 using Application.Services.Activities;
@@ -25,7 +24,6 @@ public class Program
 
         builder.Services.AddTransient<IApplicationRepository, ApplicationRepository>();
         builder.Services.AddTransient<IApplicationService, ApplicationService>();
-        builder.Services.AddTransient<IApplyAction, ApplyAction>();
         builder.Services.AddSingleton<IActivities, ActivitiesService>();
 
         builder.Services.AddExceptionHandler<ValidatonExceptionHandler>();

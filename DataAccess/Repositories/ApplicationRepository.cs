@@ -13,24 +13,21 @@ public class ApplicationRepository : IApplicationRepository
     private readonly ApplicationContext _context;
     public ApplicationRepository(ApplicationContext context) => _context = context;
 
-    //проверка на наличие у юзера уже имеющейся неотправленной заявки
     public async Task<bool> ApplicationExistForUserAsync(Guid userId)
     {
         return await _context.Applications.AnyAsync(a => a.IsSubmitted == false && a.Author == userId);
     }
 
-    //Создание заявки
     public async Task CreateApplication(UserReport createRequest)
     {
         _context.Applications.Add(createRequest);
         await _context.SaveChangesAsync();
     }
 
-    //Получить заявку по Id
-    public async Task<UserReport> GetApplicationById(Guid id)
+    public async Task<UserReport?> GetApplicationById(Guid id)
     {
         var application = await _context.Applications.SingleOrDefaultAsync(a => a.Id == id);
-        return application ?? new UserReport();
+        return application;
     }
 
     //отредактировать заявку

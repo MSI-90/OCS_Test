@@ -5,6 +5,9 @@ using Application.Interfaces;
 using Application.MyException;
 using NotionTestWork.DataAccess.Repositories;
 using NotionTestWork.Domain.Models;
+using System.Net;
+using System;
+using System.Reflection;
 
 namespace Application.Services.Application;
 public class ApplicationService : IApplicationService
@@ -16,6 +19,10 @@ public class ApplicationService : IApplicationService
     }
     public async Task<ApplicationResponse> CreateApplicationAsync(CreateApplicationRequest app)
     {
+        var stringIsOk = VerificationPropertyAsNullOrEmpty(app);
+        if (!stringIsOk)
+            throw new MyValidationException("Ошибка при создании заявки, проверьте достоверность заполнения полей перед созданием заявки.");
+
         bool applicationAsUnsubmitForUserExist = await _repository.ApplicationExistForUserAsync(app.Author);
         if (applicationAsUnsubmitForUserExist)
             throw new MyValidationException("У Вас уже имеется заявка в статусе - не отправлена");
@@ -65,19 +72,22 @@ public class ApplicationService : IApplicationService
     public async Task<ApplicationResponse> GetApplicationById(Guid id)
     {
         var applicatoinFromRepository = await _repository.GetApplicationById(id);
-        if (applicatoinFromRepository != null && !string.IsNullOrEmpty(applicatoinFromRepository.Name))
+        if (applicatoinFromRepository is null)
         {
-            return new ApplicationResponse
-            {
-                Id = applicatoinFromRepository.Id,
-                Author = applicatoinFromRepository.Author,
-                Activity = applicatoinFromRepository.Activity,
-                Name = applicatoinFromRepository.Name,
-                Description = applicatoinFromRepository.Description,
-                Outline = applicatoinFromRepository.Outline
-            };
+            throw new MyValidationException($"Нет заявки под id = {id}", HttpStatusCode.NotFound);
         }
-        return new ApplicationResponse();
+
+        return new ApplicationResponse
+        {
+            Id = applicatoinFromRepository.Id,
+            Author = applicatoinFromRepository.Author,
+            Activity = applicatoinFromRepository.Activity,
+            Name = applicatoinFromRepository.Name,
+            Description = applicatoinFromRepository.Description,
+            Outline = applicatoinFromRepository.Outline
+        };
+
+        //return new ApplicationResponse();
     }
 
     public Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime date)
@@ -103,5 +113,26 @@ public class ApplicationService : IApplicationService
     public Task<ApplicationResponse> UpdateApplicationAsync(UpdateApplicationRequest newData, Guid id)
     {
         throw new NotImplementedException();
+    }
+
+    public bool VerificationPropertyAsNullOrEmpty(CreateApplicationRequest application)
+    {
+        Type properties = application.GetType();
+        PropertyInfo[] propertyInfo = properties.GetProperties();
+        var values = new List<string>();
+        foreach (var item in propertyInfo)
+        {
+            var value = item.GetValue(application);
+            values.Add(value?.ToString() ?? string.Empty);
+        }
+
+        foreach (var item in values)
+        {
+            if (string.IsNullOrEmpty(item) || string.IsNullOrWhiteSpace(item))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -1,6 +1,4 @@
-﻿using Api.Infrastructure;
-using Api.Middlewares.ExceptionMiddleware;
-using Application.Dto.Applications.CreateApplication;
+﻿using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +10,11 @@ namespace NotionTestWork.Api.Controllers;
 public class ApplicationsController : ControllerBase
 {
     private readonly IActivities _activities;
-    private readonly IApplyAction _action;
-    public ApplicationsController(IApplyAction action, IActivities activities)
+    private readonly IApplicationService _service;
+    public ApplicationsController(IApplicationService service, IActivities activities)
     {
         _activities = activities;
-        _action = action;
+        _service = service;
     }
 
     [HttpGet("{applicationId:guid}")]
@@ -25,7 +23,7 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(Guid applicationId)
     {
-        var request = await _action.GetById(applicationId);
+        var request = await _service.GetApplicationById(applicationId);
         return Ok(request);
     }
 
@@ -35,7 +33,7 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateApplication([FromBody] CreateApplicationRequest newApp)
     {
-        var request = await _action.CreateOrNot(newApp);
+        var request = await _service.CreateApplicationAsync(newApp);
         return Ok(request);
     }
 
