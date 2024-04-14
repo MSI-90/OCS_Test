@@ -50,7 +50,7 @@
                 <li>Во вкладке General в поле name: здесь можно ввести любую строку</li>
                 <li>Во вкладке Connection Host name/address: пишем localhost</li>
                 <li<>Port 5433</li>
-                <li<>Maintenance database: TestworkOnNotion</li>
+                <li<>Maintenance database: OCSTest</li>
                 <li<>Username: postgres</li>
                 <li>Password: postgres</ul>
                 <li>Нажимаем кнопку Save</li>
