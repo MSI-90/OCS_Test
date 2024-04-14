@@ -1,5 +1,6 @@
 ﻿using Api.Orchestrator;
 using Application.Dto;
+using Application.Dto.Applications;
 using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
 using Application.Interfaces;
@@ -9,18 +10,9 @@ namespace NotionTestWork.Api.Controllers;
 
 [Route("applications")]
 [ApiController]
-public class ApplicationsController : ControllerBase
+public class ApplicationsController(IActivities _activities, IApplicationService _service,
+    IRequestHandler<ApplicationsFromDateQuery, IEnumerable<ApplicationResponse>> _getDateTimeAsQueryHandlercs) : ControllerBase
 {
-    private readonly IActivities _activities;
-    private readonly IApplicationService _service;
-    private readonly HandlerBase<ApplicationsFromDateQuery> _getDateTimeAsQueryHandlercs;
-    public ApplicationsController(IApplicationService service, IActivities activities, HandlerBase<ApplicationsFromDateQuery> getDateTimeAsQueryHandlercs)
-    {
-        _activities = activities;
-        _service = service;
-        _getDateTimeAsQueryHandlercs = getDateTimeAsQueryHandlercs;
-    }
-
     [HttpGet("{applicationId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -80,8 +72,7 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetSubmittedApplications([FromQuery] ApplicationsFromDateQuery query)
     {
-        var request = await _getDateTimeAsQueryHandlercs.Handler(query);
-        //var request = await _service.GetApplicationIfSubmittedAsync(submittedAfter);
+        var request = await _getDateTimeAsQueryHandlercs.Handle(query);
         return Ok(request);
     }
 

@@ -3,22 +3,14 @@ using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
 using Application.Interfaces;
 using Application.MyException;
-using Microsoft.EntityFrameworkCore;
 using NotionTestWork.DataAccess.Repositories;
 using NotionTestWork.Domain.Models;
-using System;
 using System.Net;
 using System.Reflection;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Application.Services.Application;
-public class ApplicationService : IApplicationService
+public class ApplicationService(IApplicationRepository _repository) : IApplicationService
 {
-    private readonly IApplicationRepository _repository;
-    public ApplicationService(IApplicationRepository repository)
-    {
-        _repository = repository;
-    }
     public async Task<ApplicationResponse> CreateApplicationAsync(CreateApplicationRequest app)
     {
         var stringIsOk = VerificationPropertyAsNullOrEmpty(app);

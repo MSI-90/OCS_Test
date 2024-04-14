@@ -1,14 +1,15 @@
 ﻿using Application.Dto.Applications;
+using Application.Interfaces;
 
 namespace Api.Orchestrator;
 
-public abstract class HandlerBase<T> where T : class
+public abstract class HandlerBase<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
+    where TRequest : class
+    where TResponse : class
 {
-    //protected abstract Task Validate(T request);
-    protected abstract Task<IEnumerable<ApplicationResponse>> HandleInner(T request);
-    public async Task<IEnumerable<ApplicationResponse>> Handler(T request)
+    protected abstract Task<TResponse> HandleInner(TRequest request);
+    public async Task<TResponse> Handle(TRequest request)
     {
-        //Validate(request);
         return await HandleInner(request);
     }
 }

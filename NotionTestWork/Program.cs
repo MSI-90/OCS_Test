@@ -1,6 +1,7 @@
 using Api.Middlewares.ExceptionMiddleware;
 using Api.Orchestrator;
 using Application.Dto;
+using Application.Dto.Applications;
 using Application.Interfaces;
 using Application.Services.Activities;
 using Application.Services.Application;
@@ -16,18 +17,16 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-
         builder.Services.AddControllers();
 
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddDbContext<IApplicationDbContext, ApplicationContext>();
 
+        builder.Services.AddSingleton<IActivities, ActivitiesService>();
         builder.Services.AddTransient<IApplicationRepository, ApplicationRepository>();
         builder.Services.AddTransient<IApplicationService, ApplicationService>();
-        builder.Services.AddSingleton<IActivities, ActivitiesService>();
-        builder.Services.AddTransient<HandlerBase<ApplicationsFromDateQuery>, GetDateTimeAsQueryHandlercs>();
+        builder.Services.AddTransient<IRequestHandler<ApplicationsFromDateQuery, IEnumerable<ApplicationResponse>>, GetDateTimeAsQueryHandlercs>();
 
         builder.Services.AddExceptionHandler<ValidatonExceptionHandler>();
         builder.Services.AddExceptionHandler<InternalServerExceptionHandler>();
@@ -40,16 +39,11 @@ public class Program
             applicationDbContext.Database.Migrate();
         }
 
-        // Configure the HTTP request pipeline.
-        //if (app.Environment.IsDevelopment())
-        //{
         app.UseSwagger();
         app.UseSwaggerUI();
-        //}
 
         app.UseExceptionHandler("/errors");
 
-        //app.UseHttpsRedirection();
         app.UseRouting();
 
         app.UseAuthorization();

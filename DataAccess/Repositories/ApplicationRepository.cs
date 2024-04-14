@@ -6,11 +6,8 @@ using TestWorkForNotion.DataAccess;
 
 namespace NotionTestWork.DataAccess.Repositories;
 
-public class ApplicationRepository : IApplicationRepository
+public class ApplicationRepository(ApplicationContext _context) : IApplicationRepository
 {
-    private readonly ApplicationContext _context;
-    public ApplicationRepository(ApplicationContext context) => _context = context;
-
     public async Task<bool> ApplicationExistForUserAsync(Guid userId) => await _context.Applications.AnyAsync(a => a.IsSubmitted == false && a.Author == userId);
 
     public async Task CreateApplication(UserReport createRequest)

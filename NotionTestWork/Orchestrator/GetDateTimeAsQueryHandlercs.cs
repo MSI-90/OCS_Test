@@ -5,10 +5,8 @@ using Application.MyException;
 
 namespace Api.Orchestrator;
 
-public class GetDateTimeAsQueryHandlercs : HandlerBase<ApplicationsFromDateQuery>
+public class GetDateTimeAsQueryHandlercs(IApplicationService _service) : HandlerBase<ApplicationsFromDateQuery, IEnumerable<ApplicationResponse>>
 {
-    private readonly IApplicationService _service;
-    public GetDateTimeAsQueryHandlercs(IApplicationService service) => _service = service;
     protected override async Task<IEnumerable<ApplicationResponse>> HandleInner(ApplicationsFromDateQuery request)
     {
         if (request.SubmittedAfter.HasValue && request.UnsubmittedOlder.HasValue)
@@ -27,9 +25,4 @@ public class GetDateTimeAsQueryHandlercs : HandlerBase<ApplicationsFromDateQuery
 
         return new List<ApplicationResponse>();
     }
-
-    //protected override Task Validate(ApplicationsFromDateQuery request)
-    //{
-    //    throw new NotImplementedException();
-    //}
 }
