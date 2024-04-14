@@ -55,7 +55,6 @@ public class ApplicationsController(IActivities _activities, IApplicationService
         return Ok();
     }
 
-
     [HttpPost("{applicationId:guid}/submit")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

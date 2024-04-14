@@ -119,7 +119,7 @@ public class ApplicationService(IApplicationRepository _repository) : IApplicati
             return Enumerable.Empty<ApplicationResponse>();
 
         var getSubmittedApplications = await _repository.GetApplicationIfSubmittedAsync(date.Value);
-        if (getSubmittedApplications is null)
+        if (!getSubmittedApplications.Any())
             throw new MyValidationException($"Нет заявок, удовлетворяющих условию: заявки поданы после {date.Value}");
 
         var applicationsSubmittedAfteDate = getSubmittedApplications.Select(a => new ApplicationResponse
@@ -141,8 +141,8 @@ public class ApplicationService(IApplicationRepository _repository) : IApplicati
             return Enumerable.Empty<ApplicationResponse>();
 
         var getUnsubmittedApplications = await _repository.GetUnsobmitedApplicationAsync(date.Value);
-        if (getUnsubmittedApplications is null)
-            throw new MyValidationException($"Нет заявок, удовлетворяющих условию: заявки поданы после {date.Value}");
+        if (!getUnsubmittedApplications.Any())
+            throw new MyValidationException($"Нет заявок не поданных и старше даты {date.Value}");
 
         var applicationsSubmittedAfteDate = getUnsubmittedApplications.Select(a => new ApplicationResponse
         {
