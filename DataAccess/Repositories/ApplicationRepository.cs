@@ -1,10 +1,7 @@
-﻿using Application.Dto.Applications;
-using Application.Dto.Applications.CreateApplication;
-using Application.Dto.Applications.UpdateApplication;
+﻿using Application.Dto.Applications.UpdateApplication;
 using Microsoft.EntityFrameworkCore;
 using NotionTestWork.Domain.Models;
 using TestWorkForNotion.DataAccess;
-using static System.Net.Mime.MediaTypeNames;
 
 
 namespace NotionTestWork.DataAccess.Repositories;
@@ -14,10 +11,7 @@ public class ApplicationRepository : IApplicationRepository
     private readonly ApplicationContext _context;
     public ApplicationRepository(ApplicationContext context) => _context = context;
 
-    public async Task<bool> ApplicationExistForUserAsync(Guid userId)
-    {
-        return await _context.Applications.AnyAsync(a => a.IsSubmitted == false && a.Author == userId);
-    }
+    public async Task<bool> ApplicationExistForUserAsync(Guid userId) => await _context.Applications.AnyAsync(a => a.IsSubmitted == false && a.Author == userId);
 
     public async Task CreateApplication(UserReport createRequest)
     {
@@ -69,27 +63,8 @@ public class ApplicationRepository : IApplicationRepository
         return application;
     }
 
-    //public async Task<ApplicationResponse> GetCurrentApplication(Guid id)
-    //{
-    /*
-    var user = await _context.users.FindAsync(id);
-    if (user is null)
-        throw new Exception($"Пользователь с данным идентификатором {id} не найден");
+    public async Task<UserReport?> GetCurrentApplication(Guid userId) =>
+        await _context.Applications.FirstOrDefaultAsync(a => a.Author == userId && a.IsSubmitted == false);
 
-    var application = await _context.applications.Include(a => a.Author).FirstOrDefaultAsync(a => a.Author.Id == user.Id && a.IsSubmitted == false);
-    if (application is null)
-        throw new Exception($"Нет неотправленной заявки");
-
-    return new ApplicationResponse
-    {
-        Id = application.Id,
-        Author = application.Author.Id,
-        Activity = application.Activity,
-        Name = application.Name,
-        Description = application.Description,
-        Outline = application.Outline
-    };
-    */
-    //    return null;
-    //}
+    public async Task<bool> UserExist(Guid userId) => await _context.Applications.AnyAsync(a => a.Author == userId);
 }

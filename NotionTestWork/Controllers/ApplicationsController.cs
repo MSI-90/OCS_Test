@@ -24,6 +24,7 @@ public class ApplicationsController : ControllerBase
     [HttpGet("{applicationId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetApplicationById(Guid applicationId)
     {
         var request = await _service.GetApplicationById(applicationId);
@@ -33,6 +34,7 @@ public class ApplicationsController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateApplication([FromBody] CreateApplicationRequest newApp)
     {
         var request = await _service.CreateApplicationAsync(newApp);
@@ -43,6 +45,7 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateApplication([FromBody] UpdateApplicationRequest newApplication, Guid applicationId)
     {
         var request = await _service.UpdateApplicationAsync(newApplication, applicationId);
@@ -53,6 +56,7 @@ public class ApplicationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteApplicationById(Guid applicationId)
     {
         await _service.DeleteApplicationById(applicationId);
@@ -63,6 +67,7 @@ public class ApplicationsController : ControllerBase
     [HttpPost("{applicationId:guid}/submit")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> SubmitApplication(Guid applicationId)
     {
         await _service.SendApplicationAsync(applicationId);
@@ -72,6 +77,7 @@ public class ApplicationsController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetSubmittedApplications([FromQuery] ApplicationsFromDateQuery query)
     {
         var request = await _getDateTimeAsQueryHandlercs.Handler(query);
@@ -79,26 +85,18 @@ public class ApplicationsController : ControllerBase
         return Ok(request);
     }
 
-    //[HttpGet]
-    //[ProducesResponseType(StatusCodes.Status200OK)]
-    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-    //public async Task<IActionResult> GetUnsubmittedApplications([FromQuery] DateTime? unsubmittedOlder)
-    //{
-    //    var request = await _service.GetUnsobmitedApplicationAsync(unsubmittedOlder);
-    //    return Ok(request);
-    //}
-
-    /*
     [HttpGet("/users/{userId:guid}/currentapplication")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCurrentApplication(Guid userId)
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetUnsubmittedAppliationForUser(Guid userId)
     {
-        //var result = await _appRepo.GetCurrentApplication(userId);
-        //return Ok(result);
-        return Ok();
+        var request = await _service.GetCurrentUnsubmittedApplicationForUserAsync(userId);
+        return Ok(request);
     }
-    */
+
     [HttpGet("/activities")]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public IActionResult GetActivities()
     {
         var result = _activities.GetActivities();

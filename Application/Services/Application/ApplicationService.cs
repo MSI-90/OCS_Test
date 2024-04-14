@@ -165,9 +165,25 @@ public class ApplicationService : IApplicationService
         return applicationsSubmittedAfteDate;
     }
 
-    public async Task<ApplicationResponse> GetCurrentApplication(Guid id)
+    public async Task<ApplicationResponse> GetCurrentUnsubmittedApplicationForUserAsync(Guid id)
     {
-        return null;
+        var userExist = await _repository.UserExist(id);
+        if (!userExist)
+            throw new MyValidationException($"Нет пользователя под идентификатором {id}");
+
+        var application = await _repository.GetCurrentApplication(id);
+        if (application is null)
+            throw new MyValidationException($"У пользователя нет неотправленных заявок");
+
+        return new ApplicationResponse
+        {
+            Id = application.Id,
+            Author = application.Author,
+            Activity = application.Activity,
+            Name = application.Name,
+            Description = application.Description,
+            Outline = application.Outline
+        };
     }
 
     public bool VerificationPropertyAsNullOrEmpty(CreateApplicationRequest application)

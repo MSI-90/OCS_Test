@@ -12,5 +12,6 @@ public interface IApplicationRepository
     Task SendApplicationAsync(UserReport application);
     Task<IEnumerable<UserReport>> GetApplicationIfSubmittedAsync(DateTime date);
     Task<IEnumerable<UserReport>> GetUnsobmitedApplicationAsync(DateTime date);
-    //Task<ApplicationResponse> GetCurrentApplication(Guid id);
+    Task<UserReport?> GetCurrentApplication(Guid userId);
+    Task<bool> UserExist(Guid userId);
 }

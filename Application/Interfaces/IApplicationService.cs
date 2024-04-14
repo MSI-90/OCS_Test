@@ -13,7 +13,7 @@ public interface IApplicationService
     Task SendApplicationAsync(Guid id);
     Task<IEnumerable<ApplicationResponse>> GetApplicationIfSubmittedAsync(DateTime? date);
     Task<IEnumerable<ApplicationResponse>> GetUnsobmitedApplicationAsync(DateTime? date);
-    Task<ApplicationResponse> GetCurrentApplication(Guid id);
+    Task<ApplicationResponse> GetCurrentUnsubmittedApplicationForUserAsync(Guid id);
     bool VerificationPropertyAsNullOrEmpty(CreateApplicationRequest application);
     bool VerificationPropertyAsNullOrEmpty(UserReport application);
 }
