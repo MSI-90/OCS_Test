@@ -169,7 +169,7 @@ public class ApplicationService : IApplicationService
     {
         var userExist = await _repository.UserExist(id);
         if (!userExist)
-            throw new MyValidationException($"Нет пользователя под идентификатором {id}");
+            throw new MyValidationException($"Нет пользователя под идентификатором {id}", HttpStatusCode.NotFound);
 
         var application = await _repository.GetCurrentApplication(id);
         if (application is null)
