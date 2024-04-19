@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TestWorkForNotion.DataAccess;
@@ -11,9 +12,11 @@ using TestWorkForNotion.DataAccess;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240419040501_initialFromWork")]
+    partial class initialFromWork
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,51 +24,6 @@ namespace DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Domain.Models.ActivityType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("description");
-
-                    b.Property<byte>("TypeOfActivity")
-                        .HasMaxLength(20)
-                        .HasColumnType("smallint")
-                        .HasColumnName("activity_kind");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("activities", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Доклад, 35 - 45 минут",
-                            TypeOfActivity = (byte)0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Мастеркласс, 1-2 часа",
-                            TypeOfActivity = (byte)1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Дискуссия/круглый стол, 40-50 минут",
-                            TypeOfActivity = (byte)2
-                        });
-                });
 
             modelBuilder.Entity("NotionTestWork.Domain.Models.UserReport", b =>
                 {

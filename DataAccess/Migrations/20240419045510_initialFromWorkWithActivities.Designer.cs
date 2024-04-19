@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TestWorkForNotion.DataAccess;
@@ -11,9 +12,11 @@ using TestWorkForNotion.DataAccess;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240419045510_initialFromWorkWithActivities")]
+    partial class initialFromWorkWithActivities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,31 +43,11 @@ namespace DataAccess.Migrations
                     b.Property<byte>("TypeOfActivity")
                         .HasMaxLength(20)
                         .HasColumnType("smallint")
-                        .HasColumnName("activity_kind");
+                        .HasColumnName("activity_kynd");
 
                     b.HasKey("Id");
 
                     b.ToTable("activities", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Доклад, 35 - 45 минут",
-                            TypeOfActivity = (byte)0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Мастеркласс, 1-2 часа",
-                            TypeOfActivity = (byte)1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Дискуссия/круглый стол, 40-50 минут",
-                            TypeOfActivity = (byte)2
-                        });
                 });
 
             modelBuilder.Entity("NotionTestWork.Domain.Models.UserReport", b =>

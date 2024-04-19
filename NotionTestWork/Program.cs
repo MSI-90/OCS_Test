@@ -5,6 +5,7 @@ using Application.Dto.Applications;
 using Application.Interfaces;
 using Application.Services.Activities;
 using Application.Services.Application;
+using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using NotionTestWork.DataAccess.Repositories;
 using TestWorkForNotion.DataAccess;
@@ -21,12 +22,13 @@ public class Program
 
         builder.Services.AddSwaggerGen();
 
-        builder.Services.AddDbContext<IApplicationDbContext, ApplicationContext>();
+        builder.Services.AddDbContext<ApplicationContext>();
 
-        builder.Services.AddSingleton<IActivities, ActivitiesService>();
-        builder.Services.AddTransient<IApplicationRepository, ApplicationRepository>();
-        builder.Services.AddTransient<IApplicationService, ApplicationService>();
-        builder.Services.AddTransient<IRequestHandler<ApplicationsFromDateQuery, IEnumerable<ApplicationResponse>>, GetDateTimeAsQueryHandlercs>();
+        builder.Services.AddScoped<IApplicationService, ApplicationService>();
+        builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+        builder.Services.AddScoped<IActivityService, ActivitiesService>();
+        builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+        builder.Services.AddScoped<IRequestHandler<ApplicationsFromDateQuery, IEnumerable<ApplicationResponse>>, GetDateTimeAsQueryHandlercs>();
 
         builder.Services.AddExceptionHandler<ValidatonExceptionHandler>();
         builder.Services.AddExceptionHandler<InternalServerExceptionHandler>();

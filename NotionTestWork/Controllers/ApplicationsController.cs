@@ -10,7 +10,7 @@ namespace NotionTestWork.Api.Controllers;
 
 [Route("applications")]
 [ApiController]
-public class ApplicationsController(IActivities _activities, IApplicationService _service,
+public class ApplicationsController(IActivityService _activities, IApplicationService _service,
     IRequestHandler<ApplicationsFromDateQuery, IEnumerable<ApplicationResponse>> _getDateTimeAsQueryHandlercs) : ControllerBase
 {
     [HttpGet("{applicationId:guid}")]
@@ -84,13 +84,5 @@ public class ApplicationsController(IActivities _activities, IApplicationService
     {
         var request = await _service.GetCurrentUnsubmittedApplicationForUserAsync(userId);
         return Ok(request);
-    }
-
-    [HttpGet("/activities")]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult GetActivities()
-    {
-        var result = _activities.GetActivities();
-        return Ok(result);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Application.Dto.Activity;
 
 namespace Application.Interfaces;
-public interface IActivities
+public interface IActivityService
 {
     IEnumerable<ActivitiesResponse> GetActivities();
 }

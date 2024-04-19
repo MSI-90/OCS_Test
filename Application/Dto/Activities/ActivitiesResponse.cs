@@ -1,7 +1,9 @@
-﻿namespace Application.Dto.Activity;
+﻿using NotionTestWork.Domain;
+
+namespace Application.Dto.Activity;
 
 public class ActivitiesResponse
 {
-    public string Activity { get; set; } = string.Empty;
+    public ActivityEnum Activity { get; set; }
     public string ActivityDescription { get; set; } = string.Empty;
 }
