@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Interfaces;
+﻿namespace Application.Interfaces;
 public interface IRequestHandler<TRequest, TResponse>
 {
     Task<TResponse> Handle(TRequest request);

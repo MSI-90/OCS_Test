@@ -10,7 +10,7 @@ namespace NotionTestWork.Api.Controllers;
 
 [Route("applications")]
 [ApiController]
-public class ApplicationsController(IActivityService _activities, IApplicationService _service,
+public class ApplicationsController(IApplicationService _service,
     IRequestHandler<ApplicationsFromDateQuery, IEnumerable<ApplicationResponse>> _getDateTimeAsQueryHandlercs) : ControllerBase
 {
     [HttpGet("{applicationId:guid}")]

@@ -1,8 +1,6 @@
 ﻿using Application.Dto.Activity;
 using Application.Interfaces;
 using Application.MyException;
-using Domain.Models;
-using NotionTestWork.Domain;
 using System.Net;
 
 namespace Application.Services.Activities;
@@ -18,7 +16,7 @@ public class ActivitiesService(IActivityRepository _repository) : IActivityServi
         return list.Select(a => new ActivitiesResponse
         {
             Activity = a.TypeOfActivity,
-            ActivityDescription = a.Description,
+            Description = a.Description,
         });
     }
 }
