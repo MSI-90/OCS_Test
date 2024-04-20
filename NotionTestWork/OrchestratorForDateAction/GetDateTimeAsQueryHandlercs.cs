@@ -12,17 +12,12 @@ public class GetDateTimeAsQueryHandlercs(IApplicationService _service) : Handler
         if (request.SubmittedAfter.HasValue && request.UnsubmittedOlder.HasValue)
             throw new MyValidationException("Необходимо указать один из двух параметров");
 
-        if (request.SubmittedAfter.HasValue)
-        {
-            var result = await _service.GetApplicationIfSubmittedAsync(request.SubmittedAfter.Value);
-            return result;
-        }
-        else if (request.UnsubmittedOlder.HasValue)
-        {
-            var result = await _service.GetUnsobmitedApplicationAsync(request.UnsubmittedOlder.Value);
-            return result;
-        }
+        var result = request.SubmittedAfter.HasValue
+        ? await _service.GetApplicationIfSubmittedAsync(request.SubmittedAfter.Value)
+        : request.UnsubmittedOlder.HasValue
+            ? await _service.GetUnsobmitedApplicationAsync(request.UnsubmittedOlder.Value)
+            : new List<ApplicationResponse>();
 
-        return new List<ApplicationResponse>();
+        return result;
     }
 }

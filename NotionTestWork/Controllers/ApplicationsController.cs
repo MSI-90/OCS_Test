@@ -10,8 +10,7 @@ namespace NotionTestWork.Api.Controllers;
 
 [Route("applications")]
 [ApiController]
-public class ApplicationsController(IApplicationService _service,
-    IRequestHandler<ApplicationsFromDateQuery, IEnumerable<ApplicationResponse>> _getDateTimeAsQueryHandlercs) : ControllerBase
+public class ApplicationsController(IApplicationService _service) : ControllerBase
 {
     [HttpGet("{applicationId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -69,7 +68,8 @@ public class ApplicationsController(IApplicationService _service,
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetSubmittedApplications([FromQuery] ApplicationsFromDateQuery query)
+    public async Task<IActionResult> GetSubmittedApplications([FromServices] IRequestHandler<ApplicationsFromDateQuery, IEnumerable<ApplicationResponse>> _getDateTimeAsQueryHandlercs,
+        [FromQuery] ApplicationsFromDateQuery query)
     {
         var request = await _getDateTimeAsQueryHandlercs.Handle(query);
         return Ok(request);
