@@ -6,7 +6,7 @@ networks:
 
 services:
   ocstestwork:
-    image: docker.io/library/newbuild
+    image: docker.io/library/ending
     depends_on:
     - "app_db" 
     container_name: demo-service
