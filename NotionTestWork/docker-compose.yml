@@ -6,17 +6,17 @@ networks:
 
 services:
   ocstestwork:
-    image: docker.io/library/finally
+    image: docker.io/library/allok2
     depends_on:
     - "app_db" 
     container_name: demo-service
     ports:
-    - "8080:80"
+    - "8082:80"
     build:
       context: ..
       dockerfile: NotionTestWork/Dockerfile
     environment:
-        - ConnectionStrings__defaultConnection=User ID=postgres;Password=postgres;Server=app_db;Port=5432;Database=OCSTest;Pooling=true
+        - ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Server=app_db;Port=5432;Database=OCSTest;Pooling=true
         - ASPNETCORE_URLS=http://+:80
     networks:
         - dev
@@ -37,7 +37,3 @@ services:
 
 volumes:
   app_data: 
-  
-    
-  
-

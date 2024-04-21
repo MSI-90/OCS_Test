@@ -4,6 +4,7 @@ using Application.Dto.Applications;
 using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
 using Application.Interfaces;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace NotionTestWork.Api.Controllers;

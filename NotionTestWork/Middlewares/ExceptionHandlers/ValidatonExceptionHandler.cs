@@ -16,7 +16,7 @@ public class ValidatonExceptionHandler : IExceptionHandler
         if (validationException.ServerMessage.Count > 1)
         {
             foreach (var message in validationException.ServerMessage)
-                errorsFromExceptionAsString += message + "/n";
+                errorsFromExceptionAsString += message + " ";
         }
         else
             errorsFromExceptionAsString = validationException.ServerMessage[0];

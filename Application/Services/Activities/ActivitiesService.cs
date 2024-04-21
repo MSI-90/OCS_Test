@@ -7,9 +7,9 @@ namespace Application.Services.Activities;
 
 public class ActivitiesService(IActivityRepository _repository) : IActivityService
 {
-    public IEnumerable<ActivitiesResponse> GetActivities()
+    public async Task<IEnumerable<ActivitiesResponse>> GetActivitiesAsync()
     {
-        var list = _repository.GetActivityTypes();
+        var list = await _repository.GetActivityTypesAsync();
         if (!list.Any())
             throw new MyValidationException("Нет данных для отображения", HttpStatusCode.NotFound);
 

@@ -1,17 +1,13 @@
 ﻿using Application.Interfaces;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TestWorkForNotion.DataAccess;
 
 namespace DataAccess.Repositories;
 public class ActivityRepository(ApplicationContext _context) : IActivityRepository
 {
-    public IEnumerable<ActivityType> GetActivityTypes()
+    public async Task<ICollection<ActivityType>> GetActivityTypesAsync()
     {
-        return _context.Activities.ToList();
+        return await _context.Activities.ToListAsync();
     }
 }

@@ -3,5 +3,5 @@
 namespace Application.Interfaces;
 public interface IActivityService
 {
-    IEnumerable<ActivitiesResponse> GetActivities();
+    Task<IEnumerable<ActivitiesResponse>> GetActivitiesAsync();
 }

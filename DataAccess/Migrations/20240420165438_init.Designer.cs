@@ -12,8 +12,8 @@ using TestWorkForNotion.DataAccess;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240409121303_CreateDataBase")]
-    partial class CreateDataBase
+    [Migration("20240420165438_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,52 @@ namespace DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("NotionTestWork.Domain.Models.Applications", b =>
+            modelBuilder.Entity("Domain.Models.ActivityType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("description");
+
+                    b.Property<byte>("TypeOfActivity")
+                        .HasMaxLength(20)
+                        .HasColumnType("smallint")
+                        .HasColumnName("activity_kind");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("activities", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Доклад, 35 - 45 минут",
+                            TypeOfActivity = (byte)0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Мастеркласс, 1-2 часа",
+                            TypeOfActivity = (byte)1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Дискуссия/круглый стол, 40-50 минут",
+                            TypeOfActivity = (byte)2
+                        });
+                });
+
+            modelBuilder.Entity("NotionTestWork.Domain.Models.UserReport", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

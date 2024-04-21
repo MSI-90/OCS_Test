@@ -3,5 +3,5 @@
 namespace Application.Interfaces;
 public interface IActivityRepository
 {
-    IEnumerable<ActivityType> GetActivityTypes();
+    Task<ICollection<ActivityType>> GetActivityTypesAsync();
 }
