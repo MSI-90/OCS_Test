@@ -2,6 +2,7 @@
 using Application.Dto.Applications.UpdateApplication;
 using Application.Dto.Applications;
 using NotionTestWork.Domain.Models;
+using FluentResults;
 
 namespace Application.Interfaces;
 public interface IApplicationService

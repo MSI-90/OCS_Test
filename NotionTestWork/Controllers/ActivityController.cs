@@ -11,9 +11,9 @@ public class ActivityController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult GetActivities([FromServices] IActivityService _service)
+    public async Task<IActionResult> GetActivities([FromServices] IActivityService _service)
     {
-        var result = _service.GetActivities();
+        var result = await _service.GetActivitiesAsync();
         return Ok(result);
     }
 }

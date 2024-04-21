@@ -3,23 +3,32 @@ using Application.Dto.Applications.CreateApplication;
 using Application.Dto.Applications.UpdateApplication;
 using Application.Interfaces;
 using Application.MyException;
+using FluentValidation;
 using NotionTestWork.DataAccess.Repositories;
 using NotionTestWork.Domain.Models;
 using System.Net;
 using System.Reflection;
 
 namespace Application.Services.Application;
-public class ApplicationService(IApplicationRepository _repository) : IApplicationService
+public class ApplicationService(IApplicationRepository _repository, IValidator<CreateApplicationRequest> _validatorCreate) : IApplicationService
 {
     public async Task<ApplicationResponse> CreateApplicationAsync(CreateApplicationRequest app)
     {
-        var stringIsOk = VerificationPropertyAsNullOrEmpty(app);
-        if (!stringIsOk)
-            throw new MyValidationException("Ошибка при создании заявки, проверьте достоверность заполнения полей перед созданием заявки.");
+        if (app is null)
+            throw new MyValidationException("Проверьте");
+
+        var validationResult = await _validatorCreate.ValidateAsync(app);
+
+        if (!validationResult.IsValid)
+            throw new MyValidationException(validationResult.Errors.Select(item => item.ErrorMessage).ToList());
 
         bool applicationAsUnsubmitForUserExist = await _repository.ApplicationExistForUserAsync(app.Author);
         if (applicationAsUnsubmitForUserExist)
             throw new MyValidationException("У Вас уже имеется заявка в статусе - не отправлена");
+
+        var stringIsOk = VerificationPropertyAsNullOrEmpty(app);
+        if (!stringIsOk)
+            throw new MyValidationException("Ошибка при создании заявки, проверьте достоверность заполнения полей перед созданием заявки.");
 
         var newApplicationToDb = new UserReport
         {
